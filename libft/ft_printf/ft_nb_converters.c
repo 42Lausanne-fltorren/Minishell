@@ -6,7 +6,7 @@
 /*   By: fltorren <fltorren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 17:12:04 by fltorren          #+#    #+#             */
-/*   Updated: 2024/02/07 17:12:05 by fltorren         ###   ########.fr       */
+/*   Updated: 2024/02/09 19:07:55 by fltorren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ static int	ft_put(char *str, t_flags *flags)
 	}
 	ft_putstr_fd(tmp, 1);
 	free(tmp);
+	free(str);
 	return (len);
 }
 

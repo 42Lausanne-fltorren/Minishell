@@ -7,7 +7,12 @@ CC_FLAGS	= -Wall -Wextra -Werror -g
 INCLUDES	= -Iincludes -Ilibft/includes
 
 SRC_DIR		= src
-SRC			= main.c lexer/lexer.c
+SRC			= main.c \
+				lexer/lexer.c lexer/lexer_utils.c lexer/tokenizers.c lexer/tokenizers_simple.c \
+				parser/parser.c parser/parser_utils.c \
+				expander/expander.c expander/expander_utils.c expander/expander_cmd.c \
+				executor/executor.c executor/executor_utils.c \
+				memory/free.c
 SRCS		= $(addprefix $(SRC_DIR)/, $(SRC))
 
 LIBFT_PATH	= ./libft

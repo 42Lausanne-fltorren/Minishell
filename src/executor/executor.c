@@ -6,7 +6,7 @@
 /*   By: fltorren <fltorren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 15:33:31 by fltorren          #+#    #+#             */
-/*   Updated: 2024/02/16 16:08:08 by fltorren         ###   ########.fr       */
+/*   Updated: 2024/03/15 14:46:45 by fltorren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,23 +24,42 @@ void	ft_setup_io(t_command cmd, int *pipe_fd, int i, int len)
 	if (i == len - 1)
 	{
 		if (cmd.out)
-			dup2(open(cmd.out->value, O_WRONLY | O_CREAT | O_TRUNC, 0644), STDOUT_FILENO);
+			dup2(open(cmd.out->value, O_WRONLY | O_CREAT | O_TRUNC, 0644),
+				STDOUT_FILENO);
 		else if (cmd.append)
-			dup2(open(cmd.append->value, O_WRONLY | O_CREAT | O_APPEND, 0644), STDOUT_FILENO);
+			dup2(open(cmd.append->value, O_WRONLY | O_CREAT | O_APPEND, 0644),
+				STDOUT_FILENO);
 	}
 	else
 		dup2(pipe_fd[1], STDOUT_FILENO);
-	close(pipe_fd[0]);
-	close(pipe_fd[1]);
 }
 
-void	thread(t_command cmd)
+void	thread(t_command cmd, char **envp)
 {
-	execve(cmd.cmd->value, ft_get_args(cmd), NULL);
+	execve(cmd.cmd->value, ft_get_args(cmd), envp);
 	exit(1);
 }
 
-int	executor(t_command *commands)
+static int	ft_wait(pid_t *pids, int cmd_count, int *pipe_fd)
+{
+	int	status;
+	int	i;
+
+	i = -1;
+	while (++i < cmd_count)
+	{
+		if (i < cmd_count - 1)
+			close(pipe_fd[1]);
+		if (i > 0)
+			close(pipe_fd[0]);
+		waitpid(pids[i], &status, 0);
+	}
+	if (WIFEXITED(status))
+		return (WEXITSTATUS(status));
+	return (0);
+}
+
+int	executor(t_command *commands, char **envp)
 {
 	int		pipe_fd[2];
 	pid_t	*pids;
@@ -60,17 +79,39 @@ int	executor(t_command *commands)
 		if (pids[i] == 0)
 		{
 			ft_setup_io(commands[i], pipe_fd, i, cmd_count);
-			thread(commands[i]);
-		}
-		else
-		{
-			waitpid(pids[i], NULL, 0);
-			if (i > 0)
-				close(pipe_fd[0]);
-			if (i < cmd_count - 1)
-				close(pipe_fd[1]);
+			thread(commands[i], envp);
 		}
 	}
+	ft_wait(pids, cmd_count, pipe_fd);
 	free(pids);
 	return (0);
 }
+
+// int executor(t_command *commands)
+// {
+// 	pid_t	pid;
+
+// 	pid = fork();
+// 	if (pid == 0)
+// 	{
+// 		printf("Executing: %s\n", commands[0].cmd->value);
+// 		char **args = ft_get_args(commands[0]);
+// 		int i = 0;
+// 		while (args[i])
+// 		{
+// 			printf("args[%d]: %s\n", i, args[i]);
+// 			i++;
+// 		}
+// 		execve(commands[0].cmd->value, args, NULL);
+// 		exit(1);
+// 	}
+// 	else
+// 	{
+// 		int status;
+// 		waitpid(pid, &status, 0);
+// 		printf("Child exited with status %d\n", WEXITSTATUS(status));
+// 		if (WIFEXITED(status))
+// 			return (WEXITSTATUS(status));
+// 	}
+// 	return 0;
+// }

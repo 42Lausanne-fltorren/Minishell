@@ -6,7 +6,7 @@
 /*   By: fltorren <fltorren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/15 12:49:19 by fltorren          #+#    #+#             */
-/*   Updated: 2024/02/15 12:54:34 by fltorren         ###   ########.fr       */
+/*   Updated: 2024/03/14 17:19:07 by fltorren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,8 @@ void	expand_cmd(t_token *token, char **envp)
 {
 	char	*cmd;
 
+	if (token->value[0] == '.' || token->value[0] == '/')
+		return ;
 	cmd = ft_get_cmd_path(token->value, ft_getenv("$PATH", envp));
 	free(token->value);
 	if (!cmd)

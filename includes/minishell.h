@@ -6,7 +6,7 @@
 /*   By: fltorren <fltorren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 16:46:35 by fltorren          #+#    #+#             */
-/*   Updated: 2024/02/16 16:00:08 by fltorren         ###   ########.fr       */
+/*   Updated: 2024/03/14 21:02:19 by fltorren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@
 # include <sys/wait.h>
 # include <unistd.h>
 # include <fcntl.h>
+# include <readline/readline.h>
+# include <readline/history.h>
 
 // LEXER
 typedef enum e_token_type
@@ -74,9 +76,15 @@ void		expand_cmd(t_token *token, char **envp);
 // EXECUTOR
 int			ft_commands_len(t_command *commands);
 char		**ft_get_args(t_command command);
-int			executor(t_command *commands);
+int			executor(t_command *commands, char **envp);
 // MEMORY
 void		free_tokens(t_token *tokens);
 void		free_commands(t_command *commands);
 void		ft_free_arr(char **arr);
+
+//BUILTINS
+int			ft_echo(t_command cmd);
+
+int	ft_command_args_len(t_command command);
+
 #endif

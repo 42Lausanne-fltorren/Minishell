@@ -6,7 +6,7 @@
 /*   By: fltorren <fltorren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 16:44:07 by fltorren          #+#    #+#             */
-/*   Updated: 2024/02/16 16:05:26 by fltorren         ###   ########.fr       */
+/*   Updated: 2024/03/14 21:02:36 by fltorren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,11 @@
 
 */
 
-int	main(int argc, char **argv, char **envp)
+/*int	main(int argc, char **argv, char **envp)
 {
 	(void)argc;
 	(void)argv;
-	const char *input = "echo $HOME | wc -l >> file.txt";
+	const char *input = "echo \'$HOME\n\' | wc -l >> file.txt";
 	t_token *tokens = tokenize(input);
 	t_command *commands = parse(tokens);
 	int i = 0;
@@ -82,8 +82,37 @@ int	main(int argc, char **argv, char **envp)
 		ft_printf("\n");
 		i++;
 	}
-	executor(commands);
+	int last_command_exit_status = executor(commands);
+	ft_printf("Last command exit status: %d\n", last_command_exit_status);
 	free_tokens(tokens);
 	free_commands(commands);
+	return (0);
+}*/
+
+int	main(int argc, char **argv, char **envp)
+{
+	char		*input;
+	t_token		*tokens;
+	t_command	*commands;
+	int			last_command_exit_status;
+
+	(void)argc;
+	(void)argv;
+	while (1)
+	{
+		input = readline("minishell$ ");
+		if (!input)
+			break ;
+		if (ft_strlen(input) > 0)
+			add_history(input);
+		tokens = tokenize(input);
+		commands = parse(tokens);
+		expand_commands(commands, envp);
+		last_command_exit_status = executor(commands, envp);
+		free_tokens(tokens);
+		free_commands(commands);
+		free(input);
+	}
+	(void) last_command_exit_status;
 	return (0);
 }

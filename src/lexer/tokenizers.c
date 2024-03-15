@@ -6,7 +6,7 @@
 /*   By: fltorren <fltorren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 15:06:55 by fltorren          #+#    #+#             */
-/*   Updated: 2024/02/09 19:16:51 by fltorren         ###   ########.fr       */
+/*   Updated: 2024/03/15 14:54:39 by fltorren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ t_token	tokenize_double_quote(const char *input, int *i)
 	t_token	token;
 	int		j;
 
-	token.type = TOKEN_STRING;
+	token.type = TOKEN_WORD;
 	j = *i + 1;
 	while (input[j] && input[j] != '\"')
 		j++;

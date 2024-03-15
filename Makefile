@@ -4,7 +4,7 @@ CC			= gcc
 UNAME 		:= $(shell uname -s)
 
 CC_FLAGS	= -Wall -Wextra -Werror -g
-INCLUDES	= -Iincludes -Ilibft/includes
+INCLUDES	= -Iincludes -Ilibft/includes -lreadline
 
 SRC_DIR		= src
 SRC			= main.c \
@@ -12,12 +12,13 @@ SRC			= main.c \
 				parser/parser.c parser/parser_utils.c \
 				expander/expander.c expander/expander_utils.c expander/expander_cmd.c \
 				executor/executor.c executor/executor_utils.c \
+				builtins/echo.c \
 				memory/free.c
 SRCS		= $(addprefix $(SRC_DIR)/, $(SRC))
 
 LIBFT_PATH	= ./libft
 LIBFT		= $(LIBFT_PATH)/libft.a
-OS_FLASG	=
+OS_FLAGS	=
 
 ifeq ($(UNAME),Linux)
 	OS_FLAGS = -Llibft -lft -Wl,-rpath=libft

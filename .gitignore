@@ -5,3 +5,6 @@ build/
 *.a
 Minishell
 *.out
+out
+*.txt
+test.c

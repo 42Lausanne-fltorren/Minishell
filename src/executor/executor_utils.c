@@ -6,7 +6,7 @@
 /*   By: fltorren <fltorren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 15:43:19 by fltorren          #+#    #+#             */
-/*   Updated: 2024/02/16 15:49:31 by fltorren         ###   ########.fr       */
+/*   Updated: 2024/03/14 17:14:32 by fltorren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@ int	ft_command_args_len(t_command command)
 {
 	int	i;
 
+	if (!command.args)
+		return (0);
 	i = 0;
 	while (command.args[i])
 		i++;
@@ -42,7 +44,7 @@ char	**ft_get_args(t_command command)
 		return (NULL);
 	args[0] = command.cmd->value;
 	i = 0;
-	while (command.args[i])
+	while (command.args && command.args[i])
 	{
 		args[i + 1] = command.args[i]->value;
 		i++;

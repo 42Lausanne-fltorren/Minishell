@@ -6,7 +6,7 @@
 /*   By: fltorren <fltorren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 15:06:55 by fltorren          #+#    #+#             */
-/*   Updated: 2024/03/15 14:54:39 by fltorren         ###   ########.fr       */
+/*   Updated: 2024/03/18 15:53:41 by fltorren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,11 @@ t_token	tokenize_word(const char *input, int *i)
 	token.type = TOKEN_WORD;
 	j = *i;
 	while (input[j] && !ft_strchr(" \t|><", input[j]))
+	{
 		j++;
+		if (input[j - 1] == '\n')
+			break ;
+	}
 	token.value = ft_substr(input, *i, j - (*i));
 	(*i) = j;
 	return (token);

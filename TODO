@@ -1,10 +1,11 @@
 ========== LEXER ===========
-(- Replace \\n with \n in string literals
-)
+
+
 ========== PARSER ==========
 - Parse heredoc
 
 ========== EXPANDER ========
+builtins -.-
 
-
-Handle signals
+========== EXECUTER ========
+- Execute heredoc

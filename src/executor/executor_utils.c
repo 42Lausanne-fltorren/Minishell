@@ -6,11 +6,20 @@
 /*   By: fltorren <fltorren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 15:43:19 by fltorren          #+#    #+#             */
-/*   Updated: 2024/03/14 17:14:32 by fltorren         ###   ########.fr       */
+/*   Updated: 2024/03/17 19:18:03 by fltorren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
+
+void	ft_wait(int cmd_count, pid_t *pids, int *status)
+{
+	int	i;
+
+	i = -1;
+	while (++i < cmd_count)
+		waitpid(pids[i], &status[i], 0);
+}
 
 int	ft_commands_len(t_command *commands)
 {

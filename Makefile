@@ -11,7 +11,7 @@ SRC			= main.c \
 				lexer/lexer.c lexer/lexer_utils.c lexer/tokenizers.c lexer/tokenizers_simple.c \
 				parser/parser.c parser/parser_utils.c \
 				expander/expander.c expander/expander_utils.c expander/expander_cmd.c \
-				executor/executor.c executor/executor_utils.c \
+				executor/executor.c executor/executor_utils.c executor/executor_io.c executor/executor_heredoc.c \
 				builtins/echo.c \
 				memory/free.c
 SRCS		= $(addprefix $(SRC_DIR)/, $(SRC))

@@ -6,7 +6,7 @@
 /*   By: fltorren <fltorren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 18:26:36 by fltorren          #+#    #+#             */
-/*   Updated: 2024/04/19 23:27:17 by fltorren         ###   ########.fr       */
+/*   Updated: 2024/04/19 23:57:04 by fltorren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,14 @@ int	(*get_builtin(char *cmd))(t_token **args, char **envp, int fd)
 		return (ft_pwd);
 	if (!ft_strncmp(cmd, "cd", 3))
 		return (ft_cd);
+	if (!ft_strncmp(cmd, "env", 4))
+		return (ft_env);
+	if (!ft_strncmp(cmd, "exit", 5))
+		return (ft_exit);
+	if (!ft_strncmp(cmd, "export", 7))
+		return (ft_export);
+	if (!ft_strncmp(cmd, "unset", 6))
+		return (ft_unset);
 	return (NULL);
 }
 

@@ -12,7 +12,7 @@ SRC			= main.c \
 				parser/parser.c parser/parser_utils.c \
 				expander/expander.c expander/expander_utils.c expander/expander_cmd.c \
 				executor/executor.c executor/executor_utils.c executor/executor_io.c executor/executor_heredoc.c \
-				builtins/echo.c builtins/pwd.c builtins/cd.c \
+				builtins/ft_echo.c builtins/ft_pwd.c builtins/ft_cd.c builtins/ft_env.c builtins/ft_exit.c builtins/ft_export.c builtins/ft_unset.c \
 				memory/free.c \
 				input/input.c input/input_heredoc.c
 SRCS		= $(addprefix $(SRC_DIR)/, $(SRC))

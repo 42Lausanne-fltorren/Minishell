@@ -6,7 +6,7 @@
 /*   By: fltorren <fltorren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/04/18 13:14:59 by fltorren          #+#    #+#             */
-/*   Updated: 2024/04/18 14:26:21 by fltorren         ###   ########.fr       */
+/*   Updated: 2024/04/19 23:45:29 by fltorren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ char	*get_input_text(void)
 	free(pwd);
 	free(tmp);
 	return (input_text);
-
 }
 
 int	ft_get_heredoc_pos(char *input)

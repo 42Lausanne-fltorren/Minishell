@@ -6,7 +6,7 @@
 /*   By: fltorren <fltorren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/17 18:48:39 by fltorren          #+#    #+#             */
-/*   Updated: 2024/04/19 15:39:18 by fltorren         ###   ########.fr       */
+/*   Updated: 2024/04/19 23:43:13 by fltorren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,8 @@ void	ft_close(int **pipes, int cmd_count)
 	int	i;
 
 	i = -1;
-	while (++i < cmd_count - 1)
+	while (++i < cmd_count)
 	{
-		printf("closing pipe %d\n", i);
 		close(pipes[i][0]);
 		close(pipes[i][1]);
 	}
@@ -82,16 +81,23 @@ void	ft_setup_io(int **pipes, int i, int cmd_count, t_command cmd)
 	if (i == 0)
 	{
 		if (cmd_count > 1)
+		{
+			close(pipes[i][0]);
 			dup2(pipes[i][1], STDOUT_FILENO);
+			close(pipes[i][1]);
+		}
 		ft_setup_in(cmd);
 	}
 	else if (i < cmd_count - 1)
 	{
+		close(pipes[i - 1][1]);
 		dup2(pipes[i - 1][0], STDIN_FILENO);
+		close(pipes[i][0]);
 		dup2(pipes[i][1], STDOUT_FILENO);
 	}
 	else
 	{
+		close(pipes[i - 1][1]);
 		dup2(pipes[i - 1][0], STDIN_FILENO);
 		ft_setup_out(cmd);
 	}

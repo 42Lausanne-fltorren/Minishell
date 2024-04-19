@@ -6,7 +6,7 @@
 /*   By: fltorren <fltorren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 16:46:35 by fltorren          #+#    #+#             */
-/*   Updated: 2024/04/19 23:27:24 by fltorren         ###   ########.fr       */
+/*   Updated: 2024/04/19 23:59:32 by fltorren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,10 @@ void		ft_free_arr(char **arr);
 int			ft_echo(t_token **args, char **envp, int fd);
 int			ft_pwd(t_token **args, char **envp, int fd);
 int			ft_cd(t_token **args, char **envp, int fd);
+int			ft_env(t_token **args, char **envp, int fd);
+int			ft_exit(t_token **args, char **envp, int fd);
+int			ft_export(t_token **args, char **envp, int fd);
+int			ft_unset(t_token **args, char **envp, int fd);
 
 //INPUT
 char		*get_input(void);

@@ -1,39 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   cd.c                                               :+:      :+:    :+:   */
+/*   echo.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fltorren <fltorren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/20 14:32:41 by fltorren          #+#    #+#             */
-/*   Updated: 2024/04/19 23:27:13 by fltorren         ###   ########.fr       */
+/*   Updated: 2024/04/19 23:47:50 by fltorren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <minishell.h>
 
-int	ft_cd(t_token **args, char **envp, int fd)
+int	ft_echo(t_token **args, char **envp, int fd)
 {
+	int	i;
+	int	n;
 
-	(void) fd;
-	if (args && args[1])
+	(void)envp;
+	if (!args || !args[0])
 	{
-		ft_printf("cd: too many arguments\n");
-		return (1);
+		ft_putstr_fd("\n", fd);
+		return (0);
 	}
-	else if (!args || !args[0])
+	n = args[0] && !ft_strncmp(args[0]->value, "-n", 2);
+	i = n;
+	while (args[i])
 	{
-		if (chdir(ft_getenv("$HOME", envp)) == -1)
-		{
-			ft_printf("cd: HOME not set\n");
-			perror("minishell");
-			return (1);
-		}
+		ft_putstr_fd(args[i]->value, fd);
+		i++;
+		if (args[i])
+			ft_putstr_fd(" ", fd);
 	}
-	else if (chdir(args[0]->value) == -1)
-	{
-		ft_printf("cd: %s: %s\n", args[0]->value, strerror(errno));
-		return (1);
-	}
+	if (!n)
+		ft_putstr_fd("\n", fd);
 	return (0);
 }

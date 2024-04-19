@@ -6,7 +6,7 @@
 /*   By: fltorren <fltorren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/18 15:07:38 by fltorren          #+#    #+#             */
-/*   Updated: 2024/03/18 15:47:47 by fltorren         ###   ########.fr       */
+/*   Updated: 2024/04/18 14:46:01 by fltorren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,30 +15,18 @@
 void	ft_heredoc(t_command cmd, int *pipe)
 {
 	char	*delimiter;
-	char	*value;
 	int		i;
-	char	*sub;
 
-	delimiter = ft_strdup("");
-	value = ft_strdup("");
-	i = 0;
-	while (cmd.heredoc[i] && ft_strchr(delimiter, '\n') == NULL)
-	{
-		delimiter = ft_strjoin(delimiter, cmd.heredoc[i]->value);
-		i++;
-	}
-	delimiter = ft_substr(delimiter, 0, ft_strlen(delimiter) - 1);
+	delimiter = cmd.heredoc[0]->value;
+	i = 1;
 	while (cmd.heredoc[i])
 	{
-		value = ft_strjoin(value, cmd.heredoc[i]->value);
+		if (ft_strncmp(cmd.heredoc[i]->value, delimiter,
+				ft_strlen(cmd.heredoc[i]->value)) == 0)
+			break ;
+		if (i > 1 && ft_strchr(cmd.heredoc[i - 1]->value, '\n') == NULL)
+			ft_putstr_fd(" ", pipe[1]);
+		ft_putstr_fd(cmd.heredoc[i]->value, pipe[1]);
 		i++;
-		if (cmd.heredoc[i])
-			value = ft_strjoin(value, " ");
 	}
-	i = (int)(ft_strnstr(value, delimiter, ft_strlen(value)) - value);
-	sub = ft_substr(value, 0, i);
-	ft_putstr_fd(sub, pipe[1]);
-	free(delimiter);
-	free(value);
-	free(sub);
 }

@@ -6,7 +6,7 @@
 /*   By: fltorren <fltorren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 16:44:07 by fltorren          #+#    #+#             */
-/*   Updated: 2024/03/18 15:55:57 by fltorren         ###   ########.fr       */
+/*   Updated: 2024/04/19 23:22:35 by fltorren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,7 @@ int	main(int argc, char **argv, char **envp)
 	ft_init(argc, argv);
 	while (1)
 	{
-		input = readline("minishell$ ");
+		input = get_input();
 		if (!input)
 			break ;
 		if (ft_strlen(input) > 0)
@@ -149,3 +149,64 @@ int	main(int argc, char **argv, char **envp)
 	}
 	return (0);
 }
+
+/*int	main(void)
+{
+	int		pipefd[2];
+	pid_t	pid;
+
+	if (pipe(pipefd) == -1)
+	{
+		perror("pipe");
+		exit(1);
+	}
+	pid = fork();
+	if (pid == 0)
+	{
+		close(pipefd[1]);
+		dup2(pipefd[0], STDIN_FILENO);
+		execve("/bin/wc", (char *[]){"wc", "-c", NULL}, NULL);
+		perror("execve");
+		exit(1);
+	}
+	else if (pid < 0)
+	{
+		perror("fork");
+		exit(1);
+	}
+	else {
+		close(pipefd[0]);
+		dup2(pipefd[1], STDOUT_FILENO);
+		ft_pwd(0, 0);
+		close(pipefd[1]);
+		close(STDOUT_FILENO);
+		waitpid(pid, NULL, 0);
+	}
+}*/
+
+/*int	main(int argc, char **argv, char **envp)
+{
+	t_command	*commands;
+	t_token		token_1;
+	t_token		token_2;
+
+	(void)argc;
+	(void)argv;
+	commands = malloc(sizeof(t_command) * 2);
+	commands[0].cmd = &token_1;
+	commands[0].cmd->value = malloc(sizeof(char *));
+	commands[0].cmd->value = "pwd";
+	commands[0].args = NULL;
+	commands[0].builtin = ft_pwd;
+
+	commands[1].cmd = &token_2;
+	commands[1].cmd->value = malloc(sizeof(char *));
+	commands[1].cmd->value = "/bin/wc";
+	commands[1].args = NULL;
+
+
+	// expand_commands(commands, envp, 0);
+	executor(commands, envp);
+	free_commands(commands);
+	return (0);
+}*/

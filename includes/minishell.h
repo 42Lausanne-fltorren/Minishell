@@ -6,7 +6,7 @@
 /*   By: fltorren <fltorren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 16:46:35 by fltorren          #+#    #+#             */
-/*   Updated: 2024/03/18 15:47:53 by fltorren         ###   ########.fr       */
+/*   Updated: 2024/04/19 23:27:24 by fltorren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <signal.h>
+# include <errno.h>
 
 // LEXER
 typedef enum e_token_type
@@ -52,7 +53,7 @@ int			count_tokens(t_token *tokens);
 t_token		*append_token(t_token *tokens, t_token token);
 t_token		*tokenize(const char *input);
 
-typedef int	(*t_builtin)(t_token **args);
+typedef int	(*t_builtin)(t_token **args, char **envp, int fd);
 // PARSER
 typedef struct s_command
 {
@@ -85,6 +86,8 @@ void		ft_setup_io(int **pipes, int i, int cmd_count, t_command cmd);
 void		ft_close(int **pipes, int cmd_count);
 void		ft_wait(int cmd_count, pid_t *pids, int *status);
 void		ft_heredoc(t_command cmd, int *pipe);
+void		ft_free_all(int **pipes, pid_t *pids, int cmd_count);
+int			**ft_init_pipes(int cmd_count, pid_t *pids);
 
 // MEMORY
 void		free_tokens(t_token *tokens);
@@ -92,5 +95,12 @@ void		free_commands(t_command *commands);
 void		ft_free_arr(char **arr);
 
 //BUILTINS
-int			ft_echo(t_token **args);
+int			ft_echo(t_token **args, char **envp, int fd);
+int			ft_pwd(t_token **args, char **envp, int fd);
+int			ft_cd(t_token **args, char **envp, int fd);
+
+//INPUT
+char		*get_input(void);
+char		*ft_get_heredoc_marker(char *input);
+int			is_heredoc_done(char *input);
 #endif

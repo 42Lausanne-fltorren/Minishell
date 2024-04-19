@@ -6,7 +6,7 @@
 /*   By: fltorren <fltorren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/14 18:26:36 by fltorren          #+#    #+#             */
-/*   Updated: 2024/03/17 19:50:29 by fltorren         ###   ########.fr       */
+/*   Updated: 2024/04/19 23:27:17 by fltorren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,14 @@ void	expand_tokens(t_token **tokens, char **envp, int lces)
 	}
 }
 
-int	(*get_builtin(char *cmd))(t_token **args)
+int	(*get_builtin(char *cmd))(t_token **args, char **envp, int fd)
 {
 	if (!ft_strncmp(cmd, "echo", 5))
 		return (ft_echo);
+	if (!ft_strncmp(cmd, "pwd", 4))
+		return (ft_pwd);
+	if (!ft_strncmp(cmd, "cd", 3))
+		return (ft_cd);
 	return (NULL);
 }
 
@@ -60,7 +64,8 @@ void	expand_commands(t_command *commands, char **envp, int lces)
 		if (commands[i].out)
 			expand_token(commands[i].out, envp, lces);
 		commands[i].builtin = get_builtin(commands[i].cmd->value);
-		expand_cmd(commands[i].cmd, envp);
+		if (!commands[i].builtin)
+			expand_cmd(commands[i].cmd, envp);
 		i++;
 	}
 }

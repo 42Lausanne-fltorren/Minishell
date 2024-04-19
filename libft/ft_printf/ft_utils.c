@@ -6,7 +6,7 @@
 /*   By: fltorren <fltorren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 17:07:09 by fltorren          #+#    #+#             */
-/*   Updated: 2024/02/07 17:15:14 by fltorren         ###   ########.fr       */
+/*   Updated: 2024/04/18 23:24:25 by fltorren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	ft_put_width(int width, int len)
 {
 	while (width > len)
 	{
-		write(1, " ", 1);
+		write(STDOUT_FILENO, " ", 1);
 		width--;
 	}
 }
@@ -39,7 +39,7 @@ void	ft_put_zeroes(int width, int len)
 {
 	while (width > len)
 	{
-		write(1, "0", 1);
+		write(STDOUT_FILENO, "0", 1);
 		width--;
 	}
 }

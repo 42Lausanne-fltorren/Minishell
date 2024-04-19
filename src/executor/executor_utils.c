@@ -6,7 +6,7 @@
 /*   By: fltorren <fltorren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/16 15:43:19 by fltorren          #+#    #+#             */
-/*   Updated: 2024/03/17 19:18:03 by fltorren         ###   ########.fr       */
+/*   Updated: 2024/04/19 14:33:37 by fltorren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,10 @@ void	ft_wait(int cmd_count, pid_t *pids, int *status)
 
 	i = -1;
 	while (++i < cmd_count)
-		waitpid(pids[i], &status[i], 0);
+	{
+		if (pids[i] > 0)
+			waitpid(pids[i], status, 0);
+	}
 }
 
 int	ft_commands_len(t_command *commands)
@@ -60,4 +63,31 @@ char	**ft_get_args(t_command command)
 	}
 	args[i + 1] = NULL;
 	return (args);
+}
+
+int	**ft_init_pipes(int cmd_count, pid_t *pids)
+{
+	int	**pipes;
+	int	i;
+
+	pipes = malloc(sizeof(int *) * cmd_count);
+	if (!pipes)
+		return (NULL);
+	i = -1;
+	while (++i < cmd_count)
+	{
+		pipes[i] = malloc(sizeof(int) * 2);
+		if (!pipes[i])
+		{
+			ft_free_all(pipes, pids, i);
+			return (NULL);
+		}
+		if (pipe(pipes[i]) == -1)
+		{
+			ft_free_all(pipes, pids, i);
+			perror("pipe");
+			return (NULL);
+		}
+	}
+	return (pipes);
 }

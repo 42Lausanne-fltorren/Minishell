@@ -6,7 +6,7 @@
 /*   By: fltorren <fltorren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/09 14:39:55 by fltorren          #+#    #+#             */
-/*   Updated: 2024/02/15 12:53:16 by fltorren         ###   ########.fr       */
+/*   Updated: 2024/04/18 14:28:21 by fltorren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,11 @@ void	free_commands(t_command *commands)
 		{
 			free(commands[i].args);
 			commands[i].args = NULL;
+		}
+		if (commands[i].heredoc)
+		{
+			free(commands[i].heredoc);
+			commands[i].heredoc = NULL;
 		}
 		i++;
 	}

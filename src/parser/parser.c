@@ -6,7 +6,7 @@
 /*   By: fltorren <fltorren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/10 12:58:58 by fltorren          #+#    #+#             */
-/*   Updated: 2024/03/19 16:16:06 by fltorren         ###   ########.fr       */
+/*   Updated: 2024/04/18 13:44:53 by fltorren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ t_command	parse_command(t_token *tokens, int *i)
 	int			heredoc;
 
 	tmp = (t_command){};
+	heredoc = 0;
 	while (tokens[*i].type != TOKEN_PIPE && tokens[*i].type != TOKEN_NULL)
 	{
 		if (tokens[*i].type == TOKEN_WORD || tokens[*i].type == TOKEN_STRING)

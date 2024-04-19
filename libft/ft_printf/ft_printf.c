@@ -6,7 +6,7 @@
 /*   By: fltorren <fltorren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 17:05:18 by fltorren          #+#    #+#             */
-/*   Updated: 2024/02/07 17:21:15 by fltorren         ###   ########.fr       */
+/*   Updated: 2024/04/18 23:24:30 by fltorren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ int	ft_printf(const char *format, ...)
 		}
 		else
 		{
-			write(1, &format[i], 1);
+			write(STDOUT_FILENO, &format[i], 1);
 			len++;
 		}
 		i++;

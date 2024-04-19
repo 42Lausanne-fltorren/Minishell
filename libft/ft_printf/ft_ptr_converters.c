@@ -6,7 +6,7 @@
 /*   By: fltorren <fltorren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/02/07 17:05:45 by fltorren          #+#    #+#             */
-/*   Updated: 2024/02/07 17:15:11 by fltorren         ###   ########.fr       */
+/*   Updated: 2024/04/18 23:24:14 by fltorren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,21 +16,21 @@ static void	put(char *str, int len, t_flags flags)
 {
 	if (flags.minus == 1)
 	{
-		write(1, "0x", 2);
-		write(1, str, len);
+		write(STDOUT_FILENO, "0x", 2);
+		write(STDOUT_FILENO, str, len);
 		ft_put_width(flags.width, len + 2);
 	}
 	else if (flags.zero == 1)
 	{
-		write(1, "0x", 2);
+		write(STDOUT_FILENO, "0x", 2);
 		ft_put_zeroes(flags.width, len);
-		write(1, str, len);
+		write(STDOUT_FILENO, str, len);
 	}
 	else
 	{
 		ft_put_width(flags.width, len + 2);
-		write(1, "0x", 2);
-		write(1, str, len);
+		write(STDOUT_FILENO, "0x", 2);
+		write(STDOUT_FILENO, str, len);
 	}
 	free(str);
 }

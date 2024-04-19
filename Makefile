@@ -12,8 +12,9 @@ SRC			= main.c \
 				parser/parser.c parser/parser_utils.c \
 				expander/expander.c expander/expander_utils.c expander/expander_cmd.c \
 				executor/executor.c executor/executor_utils.c executor/executor_io.c executor/executor_heredoc.c \
-				builtins/echo.c \
-				memory/free.c
+				builtins/echo.c builtins/pwd.c builtins/cd.c \
+				memory/free.c \
+				input/input.c input/input_heredoc.c
 SRCS		= $(addprefix $(SRC_DIR)/, $(SRC))
 
 LIBFT_PATH	= ./libft

@@ -6,7 +6,7 @@
 /*   By: fltorren <fltorren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/03/17 18:48:39 by fltorren          #+#    #+#             */
-/*   Updated: 2024/03/18 15:49:06 by fltorren         ###   ########.fr       */
+/*   Updated: 2024/04/19 15:39:18 by fltorren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ void	ft_close(int **pipes, int cmd_count)
 	i = -1;
 	while (++i < cmd_count - 1)
 	{
+		printf("closing pipe %d\n", i);
 		close(pipes[i][0]);
 		close(pipes[i][1]);
 	}

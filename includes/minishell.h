@@ -68,12 +68,15 @@ typedef struct s_command
 
 t_command	*parse(t_token *tokens);
 
+int			command_args_len(t_token **args);
 t_token		**command_args_append(t_token **args, t_token *token);
 t_command	*commands_append(t_command *commands, t_command tmp);
 
 // EXPENDER
 void		expand_commands(t_command *commands, char **envp, int lces);
 char		*replace_variables(char *str, char **envp);
+void		clear_closed_brackets(char *str);
+char		*ft_replace_str(char *str, char *var, char *value);
 char		*ft_getenv(char *var, char **envp);
 void		expand_cmd(t_token *token, char **envp);
 

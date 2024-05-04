@@ -8,3 +8,4 @@ Minishell
 out
 *.txt
 test.c
+minishell_tester/

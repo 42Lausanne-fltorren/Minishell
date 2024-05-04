@@ -32,40 +32,43 @@ void	ft_free_all(int **pipes, pid_t *pids, int cmd_count)
 	free(pids);
 }
 
-static void	execute_builtin(int **pipes, t_command *cmds, int i, char **envp)
+static int	execute_builtin(int **pipes, t_command *cmds, int i, char **envp)
 {
+	int	status;
+
 	close(pipes[i - 1][0]);
-	cmds[i - 1].builtin(cmds[i - 1].args, envp, pipes[i - 1][1]);
+	status = cmds[i - 1].builtin(cmds[i - 1].args, envp, pipes[i - 1][1]);
 	close(pipes[i - 1][1]);
+	return (status);
 }
 
-void	execute(int **pipes, pid_t *pids, t_command *commands, char **envp)
+int	execute(int **pipes, pid_t *pids, t_command *cmds, char **envp)
 {
 	int	i;
-	int	cmd_count;
+	int	status;
 
-	cmd_count = ft_commands_len(commands);
 	i = -1;
-	while (++i < cmd_count)
+	while (++i < ft_commands_len(cmds))
 	{
 		pids[i] = -1;
-		if (commands[i].builtin && ((i + 1 < cmd_count
-					&& commands[i + 1].builtin) || i == cmd_count - 1))
-			commands[i].builtin(commands[i].args, envp, STDOUT_FILENO);
-		if (!commands[i].builtin)
+		if (cmds[i].builtin && ((i + 1 < ft_commands_len(cmds)
+					&& cmds[i + 1].builtin) || i == ft_commands_len(cmds) - 1))
+			status = cmds[i].builtin(cmds[i].args, envp, STDOUT_FILENO);
+		if (!cmds[i].builtin)
 		{
 			pids[i] = fork();
 			if (pids[i] == 0)
 			{
-				ft_setup_io(pipes, i, cmd_count, commands[i]);
-				thread(commands[i], envp);
+				ft_setup_io(pipes, i, ft_commands_len(cmds), cmds[i]);
+				thread(cmds[i], envp);
 			}
 			else if (pids[i] < 0)
 				perror("fork");
-			else if (i - 1 >= 0 && commands[i - 1].builtin)
-				execute_builtin(pipes, commands, i, envp);
+			else if (i - 1 >= 0 && cmds[i - 1].builtin)
+				status = execute_builtin(pipes, cmds, i, envp);
 		}
 	}
+	return (status);
 }
 
 int	executor(t_command *commands, char **envp)
@@ -82,7 +85,7 @@ int	executor(t_command *commands, char **envp)
 	pipes = ft_init_pipes(cmd_count, pids);
 	if (!pipes)
 		return (1);
-	execute(pipes, pids, commands, envp);
+	status = execute(pipes, pids, commands, envp);
 	ft_close(pipes, cmd_count);
 	ft_wait(cmd_count, pids, &status);
 	ft_free_all(pipes, pids, cmd_count);

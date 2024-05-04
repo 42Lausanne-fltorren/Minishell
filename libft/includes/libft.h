@@ -19,6 +19,7 @@
 
 /* Libc */
 int			ft_isalpha(int c);
+char		ft_isquote(char c);
 int			ft_isdigit(int c);
 int			ft_isalnum(int c);
 int			ft_isascii(int c);
@@ -64,6 +65,7 @@ int			ft_min(int a, int b);
 int			ft_max(int a, int b);
 int			ft_isspace(int c);
 int			ft_printf(const char *format, ...);
+char		*get_next_line(int fd);
 
 /* BONUS */
 typedef struct s_list

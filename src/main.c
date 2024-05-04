@@ -17,11 +17,7 @@
 	(void)argc;
 	(void)argv;
 	int	last_command_exit_status = 0;
-	const char *input = "cat <<END\n\
-		This is a\n\
-		multi-line\n\
-		text input.\n\
-		END";
+	const char *input = "echo hello'\"\"world'";
 	t_token *tokens = tokenize(input);
 	t_command *commands = parse(tokens);
 	int i = 0;
@@ -42,7 +38,7 @@
 			int j = 0;
 			while (commands[i].args[j])
 			{
-				ft_printf("%s ", commands[i].args[j]->value);
+				ft_printf("'%s' ", commands[i].args[j]->value);
 				j++;
 			}
 		} else
@@ -72,7 +68,7 @@
 	i = 0;
 	while (commands[i].cmd)
 	{
-		ft_printf("Command[%d]: %s\n\tArgs: ", i, commands[i].cmd->value);
+		ft_printf("Command[%d]: %s (Builtin: %d)\n\tArgs: ", i, commands[i].cmd->value, commands[i].builtin);
 		if (commands[i].args)
 		{
 			int j = 0;
@@ -122,12 +118,25 @@ void	ft_init(int argc, char **argv)
 	signal(SIGQUIT, handle_sigint);
 }
 
+int	handle_input(char *input, char **envp, int last_command_exit_status)
+{
+	t_token		*tokens;
+	t_command	*commands;
+
+	add_history(input);
+	tokens = tokenize(input);
+	commands = parse(tokens);
+	expand_commands(commands, envp, last_command_exit_status);
+	last_command_exit_status = executor(commands, envp);
+	free_tokens(tokens);
+	free_commands(commands);
+	return (last_command_exit_status);
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	char		*input;
-	t_token		*tokens;
-	t_command	*commands;
-	int			last_command_exit_status;
+	int			exit_status;
 
 	ft_init(argc, argv);
 	while (1)
@@ -136,18 +145,12 @@ int	main(int argc, char **argv, char **envp)
 		if (!input)
 			break ;
 		if (ft_strlen(input) > 0)
-		{
-			add_history(input);
-			tokens = tokenize(input);
-			commands = parse(tokens);
-			expand_commands(commands, envp, last_command_exit_status);
-			last_command_exit_status = executor(commands, envp);
-			free_tokens(tokens);
-			free_commands(commands);
-		}
+			exit_status = handle_input(input, envp, exit_status);
 		free(input);
+		if (!isatty(STDIN_FILENO))
+			exit(exit_status);
 	}
-	return (0);
+	exit(exit_status);
 }
 
 /*int	main(void)

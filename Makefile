@@ -1,4 +1,4 @@
-NAME		= Minishell
+NAME		= minishell
 
 CC			= gcc
 UNAME 		:= $(shell uname -s)
@@ -22,7 +22,8 @@ LIBFT		= $(LIBFT_PATH)/libft.a
 OS_FLAGS	=
 
 ifeq ($(UNAME),Linux)
-	OS_FLAGS = -Llibft -lft -Wl,-rpath=libft
+	OS_FLAGS = -Llibft -lft
+#	OS_FLAGS = -Llibft -lft -Wl,-rpath=libft
 endif
 
 all: $(NAME)

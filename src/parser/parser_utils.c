@@ -59,3 +59,13 @@ t_command	*commands_append(t_command *commands, t_command tmp)
 		free(commands);
 	return (new_commands);
 }
+
+int	command_args_len(t_token **args)
+{
+	int	i;
+
+	i = 0;
+	while (args && args[i])
+		i++;
+	return (i);
+}

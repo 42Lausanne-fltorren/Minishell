@@ -14,15 +14,17 @@
 
 static void	expand_token(t_token *token, char **envp, int lces)
 {
+	char	*tmp;
+
 	if (token->type == TOKEN_WORD)
 	{
-		if (token->value[0] == '$' && token->value[1] == '?')
+		if (ft_strnstr(token->value, "$?", ft_strlen(token->value)))
 		{
-			free(token->value);
-			token->value = ft_itoa(lces);
+			tmp = ft_itoa(lces);
+			token->value = ft_replace_str(token->value, ft_strdup("$?"), tmp);
 		}
-		else
-			token->value = replace_variables(token->value, envp);
+		token->value = replace_variables(token->value, envp);
+		clear_closed_brackets(token->value);
 	}
 }
 

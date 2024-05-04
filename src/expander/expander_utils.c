@@ -12,6 +12,62 @@
 
 #include "minishell.h"
 
+static int	is_expandable(char *str, int pos)
+{
+	int	sb;
+	int	db;
+
+	sb = -1;
+	db = -1;
+	while (pos >= 0)
+	{
+		if (str[pos] == '\'')
+		{
+			if (sb < 0)
+				sb = pos;
+			else
+				sb = -1;
+		}
+		if (str[pos] == '\"')
+		{
+			if (db < 0)
+				db = pos;
+			else
+				db = -1;
+		}
+		pos--;
+	}
+	return ((sb < 0 && db < 0) || (db >= 0 && sb >= 0 && db < sb)
+		|| (db >= 0 && sb == -1));
+}
+
+void	clear_closed_brackets(char *str)
+{
+	int		i;
+	int		to_skip;
+	int		j;
+	int		k;
+	char	qt;
+
+	i = -1;
+	k = 0;
+	to_skip = -1;
+	while (str[++i])
+	{
+		if (ft_isquote(str[i]) && i > to_skip)
+		{
+			j = i + 1;
+			qt = str[i];
+			while (str[j] && str[j] != qt)
+				j++;
+			to_skip = (str[j] == qt) * j;
+		}
+		if ((!to_skip || str[i] != qt) && i != to_skip)
+			str[k++] = str[i];
+	}
+	str[k] = '\0';
+}
+
 char	*ft_getenv(char *var, char **envp)
 {
 	int	i;
@@ -31,7 +87,7 @@ char	*ft_getenv(char *var, char **envp)
 /*
 	Takes a string and replaces the first occurence of var with value.
 */
-static char	*ft_replace_str(char *str, char *var, char *value)
+char	*ft_replace_str(char *str, char *var, char *value)
 {
 	char	*new;
 	char	*ptr;
@@ -40,6 +96,8 @@ static char	*ft_replace_str(char *str, char *var, char *value)
 	ptr = ft_strnstr(str, var, ft_strlen(str));
 	if (!ptr)
 		return (str);
+	if (!value)
+		value = "";
 	len = ptr - str;
 	new = ft_calloc(len + ft_strlen(value) + ft_strlen(ptr + ft_strlen(var))
 			+ 1, sizeof(char));
@@ -63,11 +121,13 @@ char	*replace_variables(char *str, char **envp)
 	i = 0;
 	while (str && str[i])
 	{
-		if (str[i] == '$')
+		if (str[i] == '$' && is_expandable(str, i))
 		{
 			j = 1;
 			while (str[i + j] && !ft_isspace(str[i + j]) && str[i + j] != '$')
 				j++;
+			if (j == 1)
+				return (str);
 			var = ft_substr(str, i, j);
 			value = ft_getenv(var, envp);
 			str = ft_replace_str(str, var, value);

@@ -8,6 +8,7 @@ SRCS		:= char/ft_isalnum.c \
 				char/ft_isprint.c \
 				char/ft_tolower.c \
 				char/ft_toupper.c \
+				char/ft_isquote.c \
 				ft_printf/ft_nb_converters.c \
 				ft_printf/ft_printf.c \
 				ft_printf/ft_ptr_converters.c \
@@ -55,7 +56,9 @@ SRCS		:= char/ft_isalnum.c \
 				str/ft_strrchr.c \
 				str/ft_strtrim.c \
 				str/ft_substr.c \
-				char/ft_isspace.c
+				char/ft_isspace.c \
+				get_next_line/get_next_line.c \
+				get_next_line/get_next_line_utils.c
 OBJS		:= ${SRCS:.c=.o}
 
 %.o	: %.c \

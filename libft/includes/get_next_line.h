@@ -1,33 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd.c                                              :+:      :+:    :+:   */
+/*   get_next_line.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fltorren <fltorren@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/02/20 14:32:41 by fltorren          #+#    #+#             */
-/*   Updated: 2024/04/19 23:27:07 by fltorren         ###   ########.fr       */
+/*   Created: 2023/12/02 17:59:27 by fltorren          #+#    #+#             */
+/*   Updated: 2023/12/02 20:24:19 by fltorren         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <minishell.h>
+#ifndef GET_NEXT_LINE_H
+# define GET_NEXT_LINE_H
 
-int	ft_pwd(t_token **args, char **envp, int fd)
-{
-	char	*pwd;
+# include <stdlib.h>
+# include <unistd.h>
+# include "libft.h"
 
-	(void)args;
-	(void)envp;
-	pwd = getcwd(NULL, 0);
-	if (!pwd)
-	{
-		ft_putstr_fd("minishell: pwd: ", STDERR_FILENO);
-		ft_putstr_fd(strerror(errno), STDERR_FILENO);
-		ft_putstr_fd("\n", STDERR_FILENO);
-		return (1);
-	}
-	ft_putstr_fd(pwd, fd);
-	ft_putstr_fd("\n", fd);
-	free(pwd);
-	return (0);
-}
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 1000
+# endif
+
+char	*get_next_line(int fd);
+char	*ft_read_to_left_str(int fd, char *left_str);
+char	*ft_strjoin_buf(char *left_str, char *buff);
+char	*ft_get_line(char *left_str);
+char	*ft_new_left_str(char *left_str);
+
+#endif

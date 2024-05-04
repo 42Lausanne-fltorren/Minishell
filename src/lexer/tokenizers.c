@@ -19,7 +19,7 @@ t_token	tokenize_word(const char *input, int *i)
 
 	token.type = TOKEN_WORD;
 	j = *i;
-	while (input[j] && !ft_strchr(" \t|><", input[j]))
+	while (input[j] && !ft_isspace(input[j]))
 	{
 		j++;
 		if (input[j - 1] == '\n')

@@ -12,7 +12,7 @@
 
 #include <minishell.h>
 
-int	ft_cd(t_token **args, char **envp, int fd)
+int	ft_cd(t_token **args, char ***envp, int fd)
 {
 	(void) fd;
 	if (args && args[1])
@@ -22,7 +22,7 @@ int	ft_cd(t_token **args, char **envp, int fd)
 	}
 	else if (!args || !args[0])
 	{
-		if (chdir(ft_getenv("$HOME", envp)) == -1)
+		if (chdir(ft_getenv("$HOME", *envp)) == -1)
 		{
 			ft_putstr_fd("cd: HOME not set\n", STDERR_FILENO);
 			return (1);

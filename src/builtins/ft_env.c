@@ -12,15 +12,15 @@
 
 #include <minishell.h>
 
-int	ft_env(t_token **args, char **envp, int fd)
+int	ft_env(t_token **args, char ***envp, int fd)
 {
 	int	i;
 
 	(void)args;
 	i = 0;
-	while (envp[i])
+	while ((*envp)[i])
 	{
-		ft_putstr_fd(envp[i], fd);
+		ft_putstr_fd((*envp)[i], fd);
 		ft_putstr_fd("\n", fd);
 		i++;
 	}

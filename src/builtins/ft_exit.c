@@ -12,7 +12,7 @@
 
 #include <minishell.h>
 
-int	ft_exit(t_token **args, char **envp, int fd)
+int	ft_exit(t_token **args, char ***envp, int fd)
 {
 	int	i;
 

@@ -40,7 +40,7 @@ void	expand_tokens(t_token **tokens, char **envp, int lces)
 	}
 }
 
-int	(*get_builtin(char *cmd))(t_token **args, char **envp, int fd)
+int	(*get_builtin(char *cmd))(t_token **args, char ***envp, int fd)
 {
 	if (!ft_strncmp(cmd, "echo", 5))
 		return (ft_echo);

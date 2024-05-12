@@ -27,8 +27,7 @@ void	ft_close(int **pipes, int cmd_count)
 void	ft_io_error(char *file)
 {
 	ft_putstr_fd("minishell: ", STDERR_FILENO);
-	ft_putstr_fd(file, STDERR_FILENO);
-	ft_putstr_fd(": No such file or directory\n", STDERR_FILENO);
+	perror(file);
 	exit(1);
 }
 
@@ -41,7 +40,8 @@ void	ft_setup_in(t_command cmd)
 		fd[0] = open(cmd.in->value, O_RDONLY, 0644);
 		if (fd[0] == -1)
 			ft_io_error(cmd.in->value);
-		dup2(fd[0], STDIN_FILENO);
+		else
+			dup2(fd[0], STDIN_FILENO);
 		close(fd[0]);
 	}
 	else if (cmd.heredoc)
@@ -86,7 +86,6 @@ void	ft_setup_io(int **pipes, int i, int cmd_count, t_command cmd)
 			dup2(pipes[i][1], STDOUT_FILENO);
 			close(pipes[i][1]);
 		}
-		ft_setup_in(cmd);
 	}
 	else if (i < cmd_count - 1)
 	{
@@ -99,7 +98,8 @@ void	ft_setup_io(int **pipes, int i, int cmd_count, t_command cmd)
 	{
 		close(pipes[i - 1][1]);
 		dup2(pipes[i - 1][0], STDIN_FILENO);
-		ft_setup_out(cmd);
 	}
+	ft_setup_in(cmd);
+	ft_setup_out(cmd);
 	ft_close(pipes, cmd_count);
 }

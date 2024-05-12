@@ -22,6 +22,19 @@ void	parse_string(t_command *tmp, t_token *tokens, int *i, int heredoc)
 		tmp->args = command_args_append(tmp->args, &tokens[*i]);
 }
 
+void	parse_in(t_command *tmp, t_token *tokens, int *i)
+{
+	int		fd;
+	t_token	t;
+
+	t = tokens[++(*i)];
+	fd = open(t.value, O_RDONLY, 0644);
+	if (fd == -1 && !tmp->open_error)
+		tmp->open_error = t.value;
+	else
+		tmp->in = &tokens[*i];
+}
+
 t_command	parse_command(t_token *tokens, int *i)
 {
 	t_command	tmp;
@@ -34,7 +47,7 @@ t_command	parse_command(t_token *tokens, int *i)
 		if (tokens[*i].type == TOKEN_WORD || tokens[*i].type == TOKEN_STRING)
 			parse_string(&tmp, tokens, i, heredoc);
 		else if (tokens[*i].type == TOKEN_IN)
-			tmp.in = &tokens[++(*i)];
+			parse_in(&tmp, tokens, i);
 		else if (tokens[*i].type == TOKEN_OUT)
 			tmp.out = &tokens[++(*i)];
 		else if (tokens[*i].type == TOKEN_APPEND)

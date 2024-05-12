@@ -69,3 +69,8 @@ int	command_args_len(t_token **args)
 		i++;
 	return (i);
 }
+
+//char *ft_open_error()
+//{
+//
+//}

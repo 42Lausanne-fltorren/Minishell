@@ -12,12 +12,63 @@
 
 #include "minishell.h"
 
+int	event(void)
+{
+	return (0);
+}
+
+void	handle_sigint(int sig)
+{
+	(void)sig;
+	rl_replace_line("", 0);
+	rl_redisplay();
+	rl_done = 1;
+}
+
+char	**ft_init(int argc, char **argv, char **envp)
+{
+	char	**new_envp;
+	int		i;
+
+	(void)argc;
+	(void)argv;
+	rl_event_hook = event;
+	rl_catch_signals = 0;
+	signal(SIGINT, handle_sigint);
+	signal(SIGQUIT, handle_sigint);
+	i = 0;
+	while (envp[i])
+		i++;
+	new_envp = malloc((i + 1) * sizeof(char *));
+	i = -1;
+	while (envp[++i])
+		new_envp[i] = ft_strdup(envp[i]);
+	new_envp[i] = NULL;
+	return (new_envp);
+}
+
+int	handle_input(char *input, char ***envp, int last_command_exit_status)
+{
+	t_token		*tokens;
+	t_command	*commands;
+
+	add_history(input);
+	tokens = tokenize(input);
+	commands = parse(tokens);
+	expand_commands(commands, *envp, last_command_exit_status);
+	last_command_exit_status = executor(commands, envp);
+	free_tokens(tokens);
+	free_commands(commands);
+	return (last_command_exit_status);
+}
+
 /*int	main(int argc, char **argv, char **envp)
 {
 	(void)argc;
 	(void)argv;
+	envp = ft_init(argc, argv, envp);
 	int	last_command_exit_status = 0;
-	const char *input = "echo hello'\"\"world'";
+	const char *input = "cat <missing | ls";
 	t_token *tokens = tokenize(input);
 	t_command *commands = parse(tokens);
 	int i = 0;
@@ -60,6 +111,8 @@
 			ft_printf("\n\tOutput: %s", commands[i].out->value);
 		if (commands[i].append)
 			ft_printf("\n\tAppend: %s", commands[i].append->value);
+		if (commands[i].open_error)
+			ft_printf("\n\tOpen error: %s", commands[i].open_error);
 		ft_printf("\n");
 		i++;
 	}
@@ -68,7 +121,8 @@
 	i = 0;
 	while (commands[i].cmd)
 	{
-		ft_printf("Command[%d]: %s (Builtin: %d)\n\tArgs: ", i, commands[i].cmd->value, commands[i].builtin);
+		ft_printf("Command[%d]: %s (Builtin: %d)\n\tArgs: ", i,
+			commands[i].cmd->value, commands[i].builtin);
 		if (commands[i].args)
 		{
 			int j = 0;
@@ -88,68 +142,31 @@
 		ft_printf("\n");
 		i++;
 	}
-	last_command_exit_status = executor(commands, envp);
+	last_command_exit_status = executor(commands, &envp);
 	ft_printf("Last command exit status: %d\n", last_command_exit_status);
 	free_tokens(tokens);
 	free_commands(commands);
-	return (0);
+	exit(last_command_exit_status);
 }*/
-
-int	event(void)
-{
-	return (0);
-}
-
-void	handle_sigint(int sig)
-{
-	(void)sig;
-	rl_replace_line("", 0);
-	rl_redisplay();
-	rl_done = 1;
-}
-
-void	ft_init(int argc, char **argv)
-{
-	(void)argc;
-	(void)argv;
-	rl_event_hook = event;
-	rl_catch_signals = 0;
-	signal(SIGINT, handle_sigint);
-	signal(SIGQUIT, handle_sigint);
-}
-
-int	handle_input(char *input, char **envp, int last_command_exit_status)
-{
-	t_token		*tokens;
-	t_command	*commands;
-
-	add_history(input);
-	tokens = tokenize(input);
-	commands = parse(tokens);
-	expand_commands(commands, envp, last_command_exit_status);
-	last_command_exit_status = executor(commands, envp);
-	free_tokens(tokens);
-	free_commands(commands);
-	return (last_command_exit_status);
-}
 
 int	main(int argc, char **argv, char **envp)
 {
 	char		*input;
 	int			exit_status;
 
-	ft_init(argc, argv);
+	envp = ft_init(argc, argv, envp);
 	while (1)
 	{
 		input = get_input();
 		if (!input)
 			break ;
 		if (ft_strlen(input) > 0)
-			exit_status = handle_input(input, envp, exit_status);
+			exit_status = handle_input(input, &envp, exit_status);
 		free(input);
 		if (!isatty(STDIN_FILENO))
-			exit(exit_status);
+			break ;
 	}
+	free_envp(envp);
 	exit(exit_status);
 }
 

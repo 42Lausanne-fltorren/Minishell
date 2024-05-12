@@ -15,12 +15,16 @@
 void	ft_wait(int cmd_count, pid_t *pids, int *status)
 {
 	int	i;
+	int	s;
 
 	i = -1;
 	while (++i < cmd_count)
 	{
 		if (pids[i] > 0)
-			waitpid(pids[i], status, 0);
+		{
+			waitpid(pids[i], &s, 0);
+			*status = (((s) & 0xff00) >> 8);
+		}
 	}
 }
 

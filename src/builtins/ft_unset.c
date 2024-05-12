@@ -12,9 +12,9 @@
 
 #include <minishell.h>
 
-void ft_unsetenv(char *var, char **envp)
+void	ft_unsetenv(char *var, char **envp)
 {
-	int 	i;
+	int		i;
 	char	*split;
 
 	i = -1;
@@ -34,16 +34,15 @@ void ft_unsetenv(char *var, char **envp)
 	}
 }
 
-int	ft_unset(t_token **args, char **envp, int fd)
+int	ft_unset(t_token **args, char ***envp, int fd)
 {
-	int i;
+	int	i;
 
 	(void)fd;
 	if (!args || !args[0])
 		return (0);
 	i = -1;
 	while (args[++i])
-		ft_unsetenv(args[i]->value, envp);
-
+		ft_unsetenv(args[i]->value, *envp);
 	return (0);
 }

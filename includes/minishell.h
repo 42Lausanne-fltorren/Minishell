@@ -53,7 +53,7 @@ int			count_tokens(t_token *tokens);
 t_token		*append_token(t_token *tokens, t_token token);
 t_token		*tokenize(const char *input);
 
-typedef int	(*t_builtin)(t_token **args, char **envp, int fd);
+typedef int	(*t_builtin)(t_token **args, char ***envp, int fd);
 // PARSER
 typedef struct s_command
 {
@@ -64,6 +64,7 @@ typedef struct s_command
 	t_token		*out;
 	t_token		*append;
 	t_builtin	builtin;
+	char		*open_error;
 }	t_command;
 
 t_command	*parse(t_token *tokens);
@@ -83,7 +84,7 @@ void		expand_cmd(t_token *token, char **envp);
 // EXECUTOR
 int			ft_commands_len(t_command *commands);
 char		**ft_get_args(t_command command);
-int			executor(t_command *commands, char **envp);
+int			executor(t_command *commands, char ***envp);
 void		ft_io_error(char *file);
 void		ft_setup_io(int **pipes, int i, int cmd_count, t_command cmd);
 void		ft_close(int **pipes, int cmd_count);
@@ -91,20 +92,22 @@ void		ft_wait(int cmd_count, pid_t *pids, int *status);
 void		ft_heredoc(t_command cmd, int *pipe);
 void		ft_free_all(int **pipes, pid_t *pids, int cmd_count);
 int			**ft_init_pipes(int cmd_count, pid_t *pids);
+int			run_builtin(t_command cmd, char ***envp, int fd);
 
 // MEMORY
 void		free_tokens(t_token *tokens);
 void		free_commands(t_command *commands);
 void		ft_free_arr(char **arr);
+void		free_envp(char **envp);
 
 //BUILTINS
-int			ft_echo(t_token **args, char **envp, int fd);
-int			ft_pwd(t_token **args, char **envp, int fd);
-int			ft_cd(t_token **args, char **envp, int fd);
-int			ft_env(t_token **args, char **envp, int fd);
-int			ft_exit(t_token **args, char **envp, int fd);
-int			ft_export(t_token **args, char **envp, int fd);
-int			ft_unset(t_token **args, char **envp, int fd);
+int			ft_echo(t_token **args, char ***envp, int fd);
+int			ft_pwd(t_token **args, char ***envp, int fd);
+int			ft_cd(t_token **args, char ***envp, int fd);
+int			ft_env(t_token **args, char ***envp, int fd);
+int			ft_exit(t_token **args, char ***envp, int fd);
+int			ft_export(t_token **args, char ***envp, int fd);
+int			ft_unset(t_token **args, char ***envp, int fd);
 
 //INPUT
 char		*get_input(void);

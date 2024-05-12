@@ -12,12 +12,18 @@
 
 #include <minishell.h>
 
-void	thread(t_command cmd, char **envp)
+void	thread(t_command *cmds, int i, int **pipes, char **envp)
 {
-	if (cmd.cmd->value == NULL)
+	if (cmds[i].cmd->value == NULL)
 		exit(1);
-	execve(cmd.cmd->value, ft_get_args(cmd), envp);
-	perror("execve");
+	if (cmds[i].open_error != NULL)
+	{
+		ft_io_error(cmds[i].open_error);
+		exit(1);
+	}
+	ft_setup_io(pipes, i, ft_commands_len(cmds), cmds[i]);
+	execve(cmds[i].cmd->value, ft_get_args(cmds[i]), envp);
+	perror("minishell: execve: ");
 	exit(1);
 }
 
@@ -32,17 +38,17 @@ void	ft_free_all(int **pipes, pid_t *pids, int cmd_count)
 	free(pids);
 }
 
-static int	execute_builtin(int **pipes, t_command *cmds, int i, char **envp)
+static int	execute_builtin(int **pipes, t_command *cmds, int i, char ***envp)
 {
 	int	status;
 
 	close(pipes[i - 1][0]);
-	status = cmds[i - 1].builtin(cmds[i - 1].args, envp, pipes[i - 1][1]);
+	status = run_builtin(cmds[i - 1], envp, pipes[i - 1][1]);
 	close(pipes[i - 1][1]);
 	return (status);
 }
 
-int	execute(int **pipes, pid_t *pids, t_command *cmds, char **envp)
+int	execute(int **pipes, pid_t *pids, t_command *cmds, char ***envp)
 {
 	int	i;
 	int	status;
@@ -53,17 +59,16 @@ int	execute(int **pipes, pid_t *pids, t_command *cmds, char **envp)
 		pids[i] = -1;
 		if (cmds[i].builtin && ((i + 1 < ft_commands_len(cmds)
 					&& cmds[i + 1].builtin) || i == ft_commands_len(cmds) - 1))
-			status = cmds[i].builtin(cmds[i].args, envp, STDOUT_FILENO);
+			status = run_builtin(cmds[i], envp, STDOUT_FILENO);
 		if (!cmds[i].builtin)
 		{
 			pids[i] = fork();
 			if (pids[i] == 0)
 			{
-				ft_setup_io(pipes, i, ft_commands_len(cmds), cmds[i]);
-				thread(cmds[i], envp);
+				thread(cmds, i, pipes, *envp);
 			}
 			else if (pids[i] < 0)
-				perror("fork");
+				perror("minishell: fork: ");
 			else if (i - 1 >= 0 && cmds[i - 1].builtin)
 				status = execute_builtin(pipes, cmds, i, envp);
 		}
@@ -71,13 +76,15 @@ int	execute(int **pipes, pid_t *pids, t_command *cmds, char **envp)
 	return (status);
 }
 
-int	executor(t_command *commands, char **envp)
+int	executor(t_command *commands, char ***envp)
 {
 	pid_t	*pids;
 	int		cmd_count;
 	int		**pipes;
 	int		status;
+	int		fork_status;
 
+	status = 0;
 	cmd_count = ft_commands_len(commands);
 	pids = malloc(sizeof(pid_t) * cmd_count);
 	if (!pids)
@@ -87,7 +94,10 @@ int	executor(t_command *commands, char **envp)
 		return (1);
 	status = execute(pipes, pids, commands, envp);
 	ft_close(pipes, cmd_count);
-	ft_wait(cmd_count, pids, &status);
+	ft_wait(cmd_count, pids, &fork_status);
 	ft_free_all(pipes, pids, cmd_count);
-	return (status);
+	if (commands[cmd_count - 1].builtin)
+		return (status);
+	else
+		return (fork_status);
 }

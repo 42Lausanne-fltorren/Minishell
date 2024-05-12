@@ -9,3 +9,4 @@ out
 *.txt
 test.c
 minishell_tester/
+.clang-tidy

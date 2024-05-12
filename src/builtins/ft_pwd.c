@@ -12,7 +12,7 @@
 
 #include <minishell.h>
 
-int	ft_pwd(t_token **args, char **envp, int fd)
+int	ft_pwd(t_token **args, char ***envp, int fd)
 {
 	char	*pwd;
 

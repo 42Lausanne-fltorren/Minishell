@@ -16,8 +16,19 @@ int	run_builtin(t_command cmd, char ***envp, int fd)
 {
 	if (cmd.open_error != NULL)
 	{
-		ft_io_error(cmd.open_error);
+		ft_putstr_fd("minishell: ", STDERR_FILENO);
+		perror(cmd.open_error);
 		return (1);
+	}
+	if (cmd.out)
+	{
+		fd = open(cmd.out->value, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+		if (fd < 0)
+		{
+			ft_putstr_fd("minishell: ", STDERR_FILENO);
+			perror(cmd.out->value);
+			return (1);
+		}
 	}
 	return (cmd.builtin(cmd.args, envp, fd));
 }

@@ -28,11 +28,36 @@ void	parse_in(t_command *tmp, t_token *tokens, int *i)
 	t_token	t;
 
 	t = tokens[++(*i)];
+	clear_closed_brackets(t.value);
 	fd = open(t.value, O_RDONLY, 0644);
 	if (fd == -1 && !tmp->open_error)
 		tmp->open_error = t.value;
 	else
 		tmp->in = &tokens[*i];
+}
+
+void	parse_out(t_command *tmp, t_token *tokens, int *i)
+{
+	int		fd;
+	int 	oflag;
+	t_token	t;
+
+	if (tokens[*i].type == TOKEN_APPEND)
+		oflag = O_WRONLY | O_CREAT | O_APPEND;
+	else
+		oflag = O_WRONLY | O_CREAT | O_TRUNC;
+	t = tokens[++(*i)];
+	clear_closed_brackets(t.value);
+	fd = open(t.value, oflag, 0644);
+	if (fd == -1 && !tmp->open_error)
+		tmp->open_error = t.value;
+	else
+	{
+		if (tokens[(*i) - 1].type == TOKEN_OUT)
+			tmp->out = &tokens[*i];
+		else
+			tmp->append = &tokens[*i];
+	}
 }
 
 t_command	parse_command(t_token *tokens, int *i)
@@ -48,10 +73,8 @@ t_command	parse_command(t_token *tokens, int *i)
 			parse_string(&tmp, tokens, i, heredoc);
 		else if (tokens[*i].type == TOKEN_IN)
 			parse_in(&tmp, tokens, i);
-		else if (tokens[*i].type == TOKEN_OUT)
-			tmp.out = &tokens[++(*i)];
-		else if (tokens[*i].type == TOKEN_APPEND)
-			tmp.append = &tokens[++(*i)];
+		else if (tokens[*i].type == TOKEN_OUT || tokens[*i].type == TOKEN_APPEND)
+			parse_out(&tmp, tokens, i);
 		else if (tokens[*i].type == TOKEN_HEREDOC)
 			heredoc = 1;
 		(*i)++;

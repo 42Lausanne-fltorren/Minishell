@@ -12,6 +12,13 @@
 
 #include "minishell.h"
 
+static int	ft_error(char *val)
+{
+	ft_putstr_fd("minishell: ", STDERR_FILENO);
+	perror(val);
+	return (1);
+}
+
 int	run_builtin(t_command cmd, char ***envp, int fd)
 {
 	if (cmd.open_error != NULL)
@@ -22,35 +29,37 @@ int	run_builtin(t_command cmd, char ***envp, int fd)
 	if (cmd.out)
 	{
 		fd = open(cmd.out->value, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-		if (fd < 0) {
-			ft_putstr_fd("minishell: ", STDERR_FILENO);
-			perror(cmd.out->value);
-			return (1);
-		}
+		if (fd < 0)
+			return (ft_error(cmd.out->value));
 	}
 	else if (cmd.append)
 	{
 		fd = open(cmd.append->value, O_WRONLY | O_CREAT | O_APPEND, 0644);
-		if (fd < 0) {
-			ft_putstr_fd("minishell: ", STDERR_FILENO);
-			perror(cmd.append->value);
-			return (1);
-		}
+		if (fd < 0)
+			return (ft_error(cmd.append->value));
 	}
 	return (cmd.builtin(cmd.args, envp, fd));
 }
 
 char	**arr_dup(char **arr)
 {
-	int 	i;
+	int		i;
 	char	**cpy;
 
+	i = 0;
+	while (arr[i])
+		i++;
+	cpy = malloc((sizeof(char *) * (i + 1)));
 	i = -1;
-	while(arr[++i])
-		;
-	cpy = malloc((sizeof(char*) * (i + 1)));
-	i = -1;
-	while(arr[++i])
+	while (arr[++i])
 		cpy[i] = ft_strdup(arr[i]);
 	return (cpy);
+}
+
+int	ft_isdir(const char *fileName)
+{
+	struct stat	path;
+
+	stat(fileName, &path);
+	return (S_ISREG(path.st_mode));
 }

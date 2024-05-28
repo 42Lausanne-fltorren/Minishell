@@ -63,7 +63,8 @@ void	expand_cmd(t_token *token, char **envp)
 {
 	char	*cmd;
 
-	if (token->value[0] == '.' || token->value[0] == '/')
+	if (token->value[0] == '.' || token->value[0] == '/'
+		|| token->value[0] == '\0')
 		return ;
 	cmd = ft_get_cmd_path(token->value, ft_getenv("$PATH", envp));
 	if (!cmd)

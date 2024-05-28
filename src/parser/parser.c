@@ -46,7 +46,7 @@ void	parse_out(t_command *tmp, t_token *tokens, int *i)
 	t_token	t;
 
 	if (tmp->open_error)
-		return;
+		return ;
 	if (tokens[*i].type == TOKEN_APPEND)
 		oflag = O_WRONLY | O_CREAT | O_APPEND;
 	else

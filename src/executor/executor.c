@@ -14,6 +14,8 @@
 
 void	thread(t_command *cmds, int i, int **pipes, char **envp)
 {
+	if (cmds[i].builtin)
+		exit(0);
 	if (cmds[i].cmd->value == NULL)
 		exit(1);
 	if (cmds[i].open_error != NULL)
@@ -22,8 +24,18 @@ void	thread(t_command *cmds, int i, int **pipes, char **envp)
 		exit(1);
 	}
 	ft_setup_io(pipes, i, ft_commands_len(cmds), cmds[i]);
+	if (cmds[i].cmd->value[0] == '\0')
+		exit(0);
+	if (!ft_isdir(cmds[i].cmd->value) && ft_strlen(cmds[i].cmd->value) > 0)
+	{
+		ft_putstr_fd("minishell: ", STDERR_FILENO);
+		ft_putstr_fd(cmds[i].cmd->value, STDERR_FILENO);
+		ft_putstr_fd(": Is a directory\n", STDERR_FILENO);
+		exit(126);
+	}
 	execve(cmds[i].cmd->value, ft_get_args(cmds[i]), envp);
-	perror("minishell: execve: ");
+	ft_putstr_fd("minishell: execve: ", STDERR_FILENO);
+	perror(cmds[i].cmd->value);
 	exit(1);
 }
 
@@ -61,18 +73,19 @@ int	execute(int **pipes, pid_t *pids, t_command *cmds, char ***envp)
 	while (++i < ft_commands_len(cmds))
 	{
 		if (cmds[i].builtin && i == ft_commands_len(cmds) - 1)
+		{
 			status = execute_builtin(pipes, cmds, i, envp);
+			continue ;
+		}
 		pids[i] = fork();
 		if (pids[i] == 0)
-		{
-			if (!cmds[i].builtin)
-				thread(cmds, i, pipes, *envp);
-			exit(0);
-		}
+			thread(cmds, i, pipes, *envp);
 		else if (pids[i] < 0)
 			perror("minishell: fork: ");
-		else if (i - 1 >= 0 && cmds[i - 1].builtin)
+		if ((i - 1 >= 0 && cmds[i - 1].builtin))
 			status = execute_builtin(pipes, cmds, i - 1, envp);
+		else if (cmds[i].builtin && cmds[i + 1].builtin)
+			status = execute_builtin(pipes, cmds, i, envp);
 	}
 	return (status);
 }

@@ -44,6 +44,8 @@ void	free_commands(t_command *commands)
 			free(commands[i].heredoc);
 			commands[i].heredoc = NULL;
 		}
+		if (commands[i].open_error)
+			free(commands[i].open_error);
 		i++;
 	}
 	free(commands);

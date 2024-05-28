@@ -72,6 +72,7 @@ t_command	*parse(t_token *tokens);
 int			command_args_len(t_token **args);
 t_token		**command_args_append(t_token **args, t_token *token);
 t_command	*commands_append(t_command *commands, t_command tmp);
+char		*open_error(char *file);
 
 // EXPENDER
 void		expand_commands(t_command *commands, char **envp, int lces);
@@ -93,6 +94,8 @@ void		ft_heredoc(t_command cmd, int *pipe);
 void		ft_free_all(int **pipes, pid_t *pids, int cmd_count);
 int			**ft_init_pipes(int cmd_count, pid_t *pids);
 int			run_builtin(t_command cmd, char ***envp, int fd);
+char		**arr_dup(char **arr);
+void		ft_setup_out(t_command cmd);
 
 // MEMORY
 void		free_tokens(t_token *tokens);

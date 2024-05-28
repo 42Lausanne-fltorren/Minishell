@@ -69,3 +69,18 @@ int	command_args_len(t_token **args)
 		i++;
 	return (i);
 }
+
+char	*open_error(char *file)
+{
+	char	*error;
+	char	*tmp;
+
+	tmp = ft_strjoin("minishell: ", file);
+	error = ft_strjoin(tmp, ": ");
+	free(tmp);
+	tmp = ft_strjoin(error, strerror(errno));
+	free(error);
+	error = ft_strjoin(tmp, "\n");
+	free(tmp);
+	return (error);
+}

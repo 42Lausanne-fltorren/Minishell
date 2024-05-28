@@ -16,19 +16,41 @@ int	run_builtin(t_command cmd, char ***envp, int fd)
 {
 	if (cmd.open_error != NULL)
 	{
-		ft_putstr_fd("minishell: ", STDERR_FILENO);
-		perror(cmd.open_error);
+		ft_putstr_fd(cmd.open_error, STDERR_FILENO);
 		return (1);
 	}
 	if (cmd.out)
 	{
 		fd = open(cmd.out->value, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-		if (fd < 0)
-		{
+		if (fd < 0) {
 			ft_putstr_fd("minishell: ", STDERR_FILENO);
 			perror(cmd.out->value);
 			return (1);
 		}
 	}
+	else if (cmd.append)
+	{
+		fd = open(cmd.append->value, O_WRONLY | O_CREAT | O_APPEND, 0644);
+		if (fd < 0) {
+			ft_putstr_fd("minishell: ", STDERR_FILENO);
+			perror(cmd.append->value);
+			return (1);
+		}
+	}
 	return (cmd.builtin(cmd.args, envp, fd));
+}
+
+char	**arr_dup(char **arr)
+{
+	int 	i;
+	char	**cpy;
+
+	i = -1;
+	while(arr[++i])
+		;
+	cpy = malloc((sizeof(char*) * (i + 1)));
+	i = -1;
+	while(arr[++i])
+		cpy[i] = ft_strdup(arr[i]);
+	return (cpy);
 }

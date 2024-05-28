@@ -24,10 +24,9 @@ void	ft_close(int **pipes, int cmd_count)
 	}
 }
 
-void	ft_io_error(char *file)
+void	ft_io_error(char *open_error)
 {
-	ft_putstr_fd("minishell: ", STDERR_FILENO);
-	perror(file);
+	ft_putstr_fd(open_error, STDERR_FILENO);
 	exit(1);
 }
 
@@ -62,7 +61,7 @@ void	ft_setup_out(t_command cmd)
 	{
 		fd = open(cmd.out->value, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		if (fd == -1)
-			ft_io_error(cmd.out->value);
+			ft_io_error(cmd.open_error);
 		dup2(fd, STDOUT_FILENO);
 		close(fd);
 	}
@@ -70,7 +69,7 @@ void	ft_setup_out(t_command cmd)
 	{
 		fd = open(cmd.append->value, O_WRONLY | O_CREAT | O_APPEND, 0644);
 		if (fd == -1)
-			ft_io_error(cmd.append->value);
+			ft_io_error(cmd.open_error);
 		dup2(fd, STDOUT_FILENO);
 		close(fd);
 	}

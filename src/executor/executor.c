@@ -40,11 +40,15 @@ void	ft_free_all(int **pipes, pid_t *pids, int cmd_count)
 
 static int	execute_builtin(int **pipes, t_command *cmds, int i, char ***envp)
 {
+	int	fd;
 	int	status;
 
-	close(pipes[i - 1][0]);
-	status = run_builtin(cmds[i - 1], envp, pipes[i - 1][1]);
-	close(pipes[i - 1][1]);
+	fd = STDOUT_FILENO;
+	if (i < ft_commands_len(cmds) - 1)
+		fd = pipes[i][1];
+	close(pipes[i][0]);
+	status = run_builtin(cmds[i], envp, fd);
+	close(pipes[i][1]);
 	return (status);
 }
 
@@ -56,22 +60,19 @@ int	execute(int **pipes, pid_t *pids, t_command *cmds, char ***envp)
 	i = -1;
 	while (++i < ft_commands_len(cmds))
 	{
-		pids[i] = -1;
-		if (cmds[i].builtin && ((i + 1 < ft_commands_len(cmds)
-					&& cmds[i + 1].builtin) || i == ft_commands_len(cmds) - 1))
-			status = run_builtin(cmds[i], envp, STDOUT_FILENO);
-		if (!cmds[i].builtin)
+		if (cmds[i].builtin && i == ft_commands_len(cmds) - 1)
+			status = execute_builtin(pipes, cmds, i, envp);
+		pids[i] = fork();
+		if (pids[i] == 0)
 		{
-			pids[i] = fork();
-			if (pids[i] == 0)
-			{
+			if (!cmds[i].builtin)
 				thread(cmds, i, pipes, *envp);
-			}
-			else if (pids[i] < 0)
-				perror("minishell: fork: ");
-			else if (i - 1 >= 0 && cmds[i - 1].builtin)
-				status = execute_builtin(pipes, cmds, i, envp);
+			exit(0);
 		}
+		else if (pids[i] < 0)
+			perror("minishell: fork: ");
+		else if (i - 1 >= 0 && cmds[i - 1].builtin)
+			status = execute_builtin(pipes, cmds, i - 1, envp);
 	}
 	return (status);
 }

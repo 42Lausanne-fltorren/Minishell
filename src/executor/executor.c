@@ -36,7 +36,7 @@ void	thread(t_command *cmds, int i, int **pipes, char **envp)
 	execve(cmds[i].cmd->value, ft_get_args(cmds[i]), envp);
 	ft_putstr_fd("minishell: execve: ", STDERR_FILENO);
 	perror(cmds[i].cmd->value);
-	exit(1);
+	exit(126);
 }
 
 void	ft_free_all(int **pipes, pid_t *pids, int cmd_count)

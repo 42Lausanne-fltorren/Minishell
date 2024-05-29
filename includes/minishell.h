@@ -97,7 +97,7 @@ int			**ft_init_pipes(int cmd_count, pid_t *pids);
 int			run_builtin(t_command cmd, char ***envp, int fd);
 char		**arr_dup(char **arr);
 void		ft_setup_out(t_command cmd);
-int			ft_isdir(const char* fileName);
+int			ft_isdir(const char *fileName);
 
 // MEMORY
 void		free_tokens(t_token *tokens);

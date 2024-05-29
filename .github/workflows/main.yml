@@ -46,5 +46,5 @@ jobs:
       - name: Upload badge
         uses: actions/upload-artifact@v2
         with:
-          name: percentage
+          name: percentage.svg
           path: percentage.svg

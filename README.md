@@ -1,5 +1,4 @@
-# Mini(s)hell !
-![norminette](https://github.com/42Lausanne-fltorren/Minishell/workflows/main/badge.svg)
+# Mini(s)hell ! ![norminette](https://github.com/42Lausanne-fltorren/Minishell/actions/workflows/main.yml/badge.svg)
 ## Introduction
 Le but de ce projet est de créer un shell minimaliste en C.
 Nous allons commencer par créer un lexer qui va transformer une ligne de commande en une liste de tokens.

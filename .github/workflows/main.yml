@@ -30,23 +30,18 @@ jobs:
           passed=$(echo $result | cut -d'/' -f1)
           total=$(echo $result | cut -d'/' -f2)
           percentage=$(( (100 * passed) / total ))
-          echo "$result ($percentage)" > percentage
+          b_result=$(echo "$result ($percentage)" | jq -sRr @uri)
+          if [ $percentage -lt 80 ]; then
+            color="red"
+          else
+            color="green"
+          fi
           if [ $percentage -lt 80 ]; then
             exit 1
           fi
           echo "$percentage%"
           exit 0
-      - name: Percentage badge
-        with:
-          passed: ${{ job.status == 'success' }}
-        run: |
-          result=$(cat percentage | jq -sRr @uri)
-          if [ $passed ]; then
-            color="green"
-          else
-            color="red"
-          fi
-          url="https://badgen.net/badge/Tests%20passed/$result/$color"
+          url="https://badgen.net/badge/Tests%20passed/$b_result/$color"
           wget -O percentage.svg $url
       - name: Upload badge
         uses: actions/upload-artifact@v2

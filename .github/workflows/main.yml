@@ -36,13 +36,13 @@ jobs:
           else
             color="green"
           fi
+          url="https://badgen.net/badge/Tests%20passed/$b_result/$color"
+          wget -O percentage.svg $url
           if [ $percentage -lt 80 ]; then
             exit 1
           fi
           echo "$percentage%"
           exit 0
-          url="https://badgen.net/badge/Tests%20passed/$b_result/$color"
-          wget -O percentage.svg $url
       - name: Upload badge
         uses: actions/upload-artifact@v2
         with:

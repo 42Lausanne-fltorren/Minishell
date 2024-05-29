@@ -38,7 +38,7 @@ jobs:
           fi
           url="https://badgen.net/badge/Tests%20passed/$b_result/$color"
           mkdir -p public
-          wget -O public/percentage.svg $url
+          wget -O public/minishell_percentage.svg $url
           if [ $percentage -lt 80 ]; then
             exit 1
           fi
@@ -49,4 +49,3 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./public
-          sub_directory: minishell_tester

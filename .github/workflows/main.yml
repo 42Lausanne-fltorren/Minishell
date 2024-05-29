@@ -19,7 +19,7 @@ jobs:
           python-version: 3.10.12
       - uses: sudosubin/git-clone-action@v1.0.1
         with:
-          repository: https://github.com/LucasKuhn/minishell_tester.git
+          repository: https://github.com/LucasKuhn/minishell_tester
           path: minishell_tester
       - name: Run the tests
         run: |

@@ -11,6 +11,8 @@ jobs:
       - uses: alexandregv/norminette-action@v3
   minishell_tester:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     name: minishell-tester
     steps:
       - uses: actions/checkout@v2

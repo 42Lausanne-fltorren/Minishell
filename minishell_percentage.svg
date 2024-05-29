@@ -1,0 +1,24 @@
+<svg width="166.3" height="20" viewBox="0 0 1663 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Tests passed: 134/146 (91)
+">
+  <title>Tests passed: 134/146 (91)
+</title>
+  <linearGradient id="oeeOw" x2="0" y2="100%">
+    <stop offset="0" stop-opacity=".1" stop-color="#EEE"/>
+    <stop offset="1" stop-opacity=".1"/>
+  </linearGradient>
+  <mask id="GiKMZ"><rect width="1663" height="200" rx="30" fill="#FFF"/></mask>
+  <g mask="url(#GiKMZ)">
+    <rect width="814" height="200" fill="#555"/>
+    <rect width="849" height="200" fill="#3C1" x="814"/>
+    <rect width="1663" height="200" fill="url(#oeeOw)"/>
+  </g>
+  <g aria-hidden="true" fill="#fff" text-anchor="start" font-family="Verdana,DejaVu Sans,sans-serif" font-size="110">
+    <text x="60" y="148" textLength="714" fill="#000" opacity="0.25">Tests passed</text>
+    <text x="50" y="138" textLength="714">Tests passed</text>
+    <text x="869" y="148" textLength="749" fill="#000" opacity="0.25">134/146 (91)
+</text>
+    <text x="859" y="138" textLength="749">134/146 (91)
+</text>
+  </g>
+  
+</svg>

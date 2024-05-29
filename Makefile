@@ -19,11 +19,11 @@ SRCS		= $(addprefix $(SRC_DIR)/, $(SRC))
 
 LIBFT_PATH	= ./libft
 LIBFT		= $(LIBFT_PATH)/libft.a
-OS_FLAGS	=
+OS_FLAGS	= -Llibft -lft
 
 ifeq ($(UNAME),Linux)
-	OS_FLAGS = -Llibft -lft
-#	OS_FLAGS = -Llibft -lft -Wl,-rpath=libft
+#	OS_FLAGS = -Llibft -lft
+	OS_FLAGS = -Llibft -lft -Wl,-rpath=libft
 endif
 
 all: $(NAME)

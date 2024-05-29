@@ -9,3 +9,28 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: alexandregv/norminette-action@v3
+  minishell_tester:
+    runs-on: ubuntu-latest
+    name: minishell-tester
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v5.1.0
+        with:
+          version: 3.10.12
+      - uses: sudosubin/git-clone-action@v1.0.1
+        with:
+          repository: https://github.com/LucasKuhn/minishell_tester.git
+      - name: Run the tests
+        run: |
+          result=$(./minishell_tester/tester | tail -n 2 | head -n 1)
+          numerator=$(echo $result | cut -d'/' -f1)
+          denominator=$(echo $result | cut -d'/' -f2)
+          percentage=$(($numerator*100/$denominator)) )
+      
+          if [ $percentage -lt 100 ]; then
+            echo "Build Failed: The percentage is $percentage, which is less than 100."
+            exit 1
+          else
+            echo "Build Passed: The percentage is $percentage, which is equal to 100."
+            exit 0
+          fi

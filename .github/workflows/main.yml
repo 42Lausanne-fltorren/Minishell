@@ -36,7 +36,7 @@ jobs:
           if [ $percentage -lt 80 ]; then
             color="red"
           else
-            color="green"
+            color="32c754"
           fi
           url="https://badgen.net/badge/Tests%20passed/$b_result/$color"
           mkdir -p public

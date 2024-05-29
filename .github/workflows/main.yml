@@ -37,14 +37,16 @@ jobs:
             color="green"
           fi
           url="https://badgen.net/badge/Tests%20passed/$b_result/$color"
-          wget -O percentage.svg $url
+          mkdir -p public
+          wget -O public/percentage.svg $url
           if [ $percentage -lt 80 ]; then
             exit 1
           fi
           echo "$percentage%"
           exit 0
-      - name: Upload badge
-        uses: actions/upload-artifact@v2
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v4
         with:
-          name: percentage.svg
-          path: percentage.svg
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
+          sub_directory: minishell_tester

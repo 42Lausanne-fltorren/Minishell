@@ -10,3 +10,7 @@ out
 test.c
 minishell_tester/
 .clang-tidy
+test.sh
+a
+b
+libft.so

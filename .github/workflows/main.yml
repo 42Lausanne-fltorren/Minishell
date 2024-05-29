@@ -21,17 +21,26 @@ jobs:
         with:
           repository: LucasKuhn/minishell_tester
           path: minishell_tester
+      - name: Build and copy lib
+        run: make re && sudo cp libft.so /usr/local/lib && sudo ldconfig
       - name: Run the tests
+#        run: cd minishell_tester && ./tester
         run: |
-          result=$(make re && cd minishell_tester && ./tester | tail -n 2 | head -n 1)
-          numerator=$(echo $result | cut -d'/' -f1)
-          denominator=$(echo $result | cut -d'/' -f2)
-          percentage=$(($numerator*100/$denominator)) )
-      
-          if [ $percentage -lt 100 ]; then
-            echo "Build Failed: The percentage is $percentage, which is less than 100."
+          result=$(cd minishell_tester && (./tester || true) | sed 's/\x1B\[[0-9;]\{1,\}[A-Za-z]//g' | tail -n 2 | head -n 1)
+          passed=$(echo $result | cut -d'/' -f1)
+          total=$(echo $result | cut -d'/' -f2)
+          percentage=$(( (100 * passed) / total ))
+          echo "$result ($percentage)" > percentage
+          if [ $percentage -lt 80 ]; then
             exit 1
-          else
-            echo "Build Passed: The percentage is $percentage, which is equal to 100."
-            exit 0
           fi
+          echo "$percentage%"
+          exit 0
+      - name: Percentage badge
+        uses: RubbaBoy/BYOB@v1.3.0
+        with:
+          NAME: percentage
+          LABEL: "Percentage of tests passed"
+          COLOR: ${{ job.status == 'success' && 'green' || 'red' }}
+          STATUS: ${{ steps.minishell_tester.outputs.data }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

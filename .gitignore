@@ -3,7 +3,7 @@ build/
 .vscode/
 *.so
 *.a
-Minishell
+minishell
 *.out
 out
 *.txt

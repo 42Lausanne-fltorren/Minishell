@@ -1,5 +1,5 @@
 # .github/workflows/main.yml
-name: Norminette
+name: Norminette + Tests
 on: [push, pull_request]
 
 jobs:
@@ -37,10 +37,19 @@ jobs:
           echo "$percentage%"
           exit 0
       - name: Percentage badge
-        uses: RubbaBoy/BYOB@v1.3.0
         with:
-          NAME: percentage
-          LABEL: "Percentage of tests passed"
-          COLOR: ${{ job.status == 'success' && 'green' || 'red' }}
-          STATUS: ${{ steps.minishell_tester.outputs.data }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          passed: ${{ job.status == 'success' }}
+        run: |
+          result=$(cat percentage | jq -sRr @uri)
+          if [ $passed ]; then
+            color="green"
+          else
+            color="red"
+          fi
+          url="https://badgen.net/badge/Tests%20passed/$result/$color"
+          wget -O percentage.svg $url
+      - name: Upload badge
+        uses: actions/upload-artifact@v2
+        with:
+          name: percentage
+          path: percentage.svg

@@ -32,7 +32,7 @@ jobs:
           passed=$(echo $result | cut -d'/' -f1)
           total=$(echo $result | cut -d'/' -f2)
           percentage=$(( (100 * passed) / total ))
-          b_result=$(echo "$result ($percentage)" | jq -sRr @uri)
+          b_result=$(echo "$result ($percentage%)" | jq -sRr @uri)
           if [ $percentage -lt 80 ]; then
             color="red"
           else

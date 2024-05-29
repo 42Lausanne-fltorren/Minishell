@@ -23,7 +23,7 @@ jobs:
           path: minishell_tester
       - name: Run the tests
         run: |
-          result=$(./minishell_tester/tester | tail -n 2 | head -n 1)
+          result=$(cd minishell_tester && ./tester | tail -n 2 | head -n 1)
           numerator=$(echo $result | cut -d'/' -f1)
           denominator=$(echo $result | cut -d'/' -f2)
           percentage=$(($numerator*100/$denominator)) )

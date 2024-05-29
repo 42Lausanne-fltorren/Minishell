@@ -20,6 +20,7 @@ jobs:
       - uses: sudosubin/git-clone-action@v1.0.1
         with:
           repository: https://github.com/LucasKuhn/minishell_tester.git
+          destination: minishell_tester
       - name: Run the tests
         run: |
           result=$(./minishell_tester/tester | tail -n 2 | head -n 1)

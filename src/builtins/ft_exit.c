@@ -33,7 +33,7 @@ int	ft_exit(t_token **args, char ***envp, int fd)
 		{
 			ft_putstr_fd("exit: ", STDERR_FILENO);
 			ft_putstr_fd(args[0]->value, STDERR_FILENO);
-			ft_putstr_fd(": numeric argument required", STDERR_FILENO);
+			ft_putstr_fd(": numeric argument required\n", STDERR_FILENO);
 			exit(2);
 		}
 	}

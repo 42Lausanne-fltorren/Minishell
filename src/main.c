@@ -54,6 +54,8 @@ int	handle_input(char *input, char ***envp, int last_command_exit_status)
 
 	add_history(input);
 	tokens = tokenize(input);
+	if (!tokens)
+		return (last_command_exit_status);
 	commands = parse(tokens);
 	expand_commands(commands, *envp, last_command_exit_status);
 	last_command_exit_status = executor(commands, envp);

@@ -12,6 +12,27 @@
 
 #include <minishell.h>
 
+static int	ft_samekey(char *envp, char *key_value)
+{
+	char	**split;
+	char	**split2;
+	int		res;
+
+	split = ft_split(envp, '=');
+	if (!split || !split[0])
+		return (0);
+	split2 = ft_split(key_value, '=');
+	if (!split2 || !split2[0])
+	{
+		ft_free_arr(split);
+		return (0);
+	}
+	res = ft_strncmp(split[0], split2[0], ft_strlen(split[0]));
+	ft_free_arr(split);
+	ft_free_arr(split2);
+	return (res == 0);
+}
+
 void	add_to_env(char *key_value, char ***envp)
 {
 	char	**new_envp;
@@ -19,7 +40,15 @@ void	add_to_env(char *key_value, char ***envp)
 
 	i = 0;
 	while ((*envp)[i])
+	{
+		if (ft_samekey((*envp)[i], key_value))
+		{
+			free((*envp)[i]);
+			(*envp)[i] = ft_strdup(key_value);
+			return ;
+		}
 		i++;
+	}
 	new_envp = malloc(sizeof(char *) * (i + 2));
 	i = 0;
 	while ((*envp)[i])
@@ -70,6 +99,9 @@ int	ft_export(t_token **args, char ***envp, int fd)
 	}
 	i = -1;
 	while (args[++i])
-		add_to_env(args[i]->value, envp);
+	{
+		if (ft_strchr(args[i]->value, '='))
+			add_to_env(args[i]->value, envp);
+	}
 	return (0);
 }

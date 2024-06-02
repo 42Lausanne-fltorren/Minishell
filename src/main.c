@@ -35,7 +35,7 @@ char	**ft_init(int argc, char **argv, char **envp)
 	rl_event_hook = event;
 	rl_catch_signals = 0;
 	signal(SIGINT, handle_sigint);
-	signal(SIGQUIT, handle_sigint);
+	signal(SIGQUIT, NULL);
 	i = 0;
 	while (envp[i])
 		i++;

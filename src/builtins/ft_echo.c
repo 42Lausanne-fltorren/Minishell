@@ -23,7 +23,7 @@ int	ft_echo(t_token **args, char ***envp, int fd)
 		ft_putstr_fd("\n", fd);
 		return (0);
 	}
-	n = args[0] && !ft_strncmp(args[0]->value, "-n", 2);
+	n = (args[0] && !ft_strncmp(args[0]->value, "-n", 2));
 	i = n;
 	while (args[i])
 	{

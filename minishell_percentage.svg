@@ -2,15 +2,15 @@
 ">
   <title>Tests passed: 134/146 (91%)
 </title>
-  <linearGradient id="MEvlK" x2="0" y2="100%">
+  <linearGradient id="ACBtY" x2="0" y2="100%">
     <stop offset="0" stop-opacity=".1" stop-color="#EEE"/>
     <stop offset="1" stop-opacity=".1"/>
   </linearGradient>
-  <mask id="iSRVv"><rect width="1783" height="200" rx="30" fill="#FFF"/></mask>
-  <g mask="url(#iSRVv)">
+  <mask id="sFNpr"><rect width="1783" height="200" rx="30" fill="#FFF"/></mask>
+  <g mask="url(#sFNpr)">
     <rect width="814" height="200" fill="#555"/>
     <rect width="969" height="200" fill="#32c754" x="814"/>
-    <rect width="1783" height="200" fill="url(#MEvlK)"/>
+    <rect width="1783" height="200" fill="url(#ACBtY)"/>
   </g>
   <g aria-hidden="true" fill="#fff" text-anchor="start" font-family="Verdana,DejaVu Sans,sans-serif" font-size="110">
     <text x="60" y="148" textLength="714" fill="#000" opacity="0.25">Tests passed</text>

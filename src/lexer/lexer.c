@@ -38,3 +38,40 @@ t_token	*tokenize(const char *input)
 	}
 	return (tokens);
 }
+
+int	is_token_type(t_token *tokens, int i, enum e_token_type type)
+{
+	int	j;
+
+	j = 0;
+	while (j < i)
+	{
+		if (tokens[j].type == TOKEN_NULL)
+			return (type == TOKEN_NULL);
+		j++;
+	}
+	return (tokens[i].type == type);
+}
+
+int	syntax_check(t_token *tokens)
+{
+	int	i;
+
+	i = 0;
+	while (tokens[i].type != TOKEN_NULL)
+	{
+		if (tokens[i].type == TOKEN_PIPE
+			&& is_token_type(tokens, i + 1, TOKEN_PIPE))
+			return (0);
+		if (tokens[i].type == TOKEN_HEREDOC
+			&& (is_token_type(tokens, i + 1, TOKEN_IN)
+				|| is_token_type(tokens, i + 1, TOKEN_HEREDOC)))
+			return (0);
+		if (tokens[i].type == TOKEN_APPEND
+			&& (is_token_type(tokens, i + 1, TOKEN_OUT)
+				|| is_token_type(tokens, i + 1, TOKEN_APPEND)))
+			return (0);
+		i++;
+	}
+	return (1);
+}

@@ -79,7 +79,10 @@ int	execute(int **pipes, pid_t *pids, t_command *cmds, char ***envp)
 		}
 		pids[i] = fork();
 		if (pids[i] == 0)
+		{
+			signal(SIGQUIT, SIG_DFL);
 			thread(cmds, i, pipes, *envp);
+		}
 		else if (pids[i] < 0)
 			perror("minishell: fork: ");
 		if ((i - 1 >= 0 && cmds[i - 1].builtin))

@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-static int	is_expandable(char *str, int pos)
+int	is_expandable(char *str, int pos)
 {
 	int	sb;
 	int	db;
@@ -77,7 +77,7 @@ char	*ft_getenv(char *var, char **envp)
 	len = ft_strlen(var + 1);
 	while (envp[i])
 	{
-		if (ft_strncmp(envp[i], var + 1, len) == 0)
+		if (ft_strncmp(envp[i], var + 1, len) == 0 && envp[i][len] == '=')
 			return (envp[i] + len + 1);
 		i++;
 	}

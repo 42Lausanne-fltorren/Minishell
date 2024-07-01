@@ -31,20 +31,29 @@ char	*get_input_text(void)
 	return (input_text);
 }
 
-int	ft_get_heredoc_pos(char *input)
+int	has_open_quotes(char *input)
 {
-	int	i;
+	int		i;
+	char	c;
 
 	i = 0;
-	while (input[i] && input[i] != '<')
+	if (!input)
+		return (0);
+	while (input[i] && input[i] != '\'' && input[i] != '\"')
 		i++;
-	if (input[i] == '<')
+	c = 0;
+	while (input[i])
 	{
-		i++;
-		while (input[i] && (input[i] == ' ' || input[i] == '\t'))
+		if (c == input[i])
+		{
+			c = 0;
 			i++;
+		}
+		if ((input[i] == '\'' || input[i] == '\"') && c == 0)
+			c = input[i];
+		i++;
 	}
-	return (i);
+	return (c != 0);
 }
 
 char	*get_input(void)
@@ -56,7 +65,7 @@ char	*get_input(void)
 
 	input_text = get_input_text();
 	input = readline(input_text);
-	while (!is_heredoc_done(input))
+	while (!is_heredoc_done(input) || has_open_quotes(input))
 	{
 		tmp = ft_strjoin(input, "\n");
 		free(input);

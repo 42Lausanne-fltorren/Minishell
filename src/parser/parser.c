@@ -15,7 +15,10 @@
 void	parse_string(t_command *tmp, t_token *tokens, int *i, int heredoc)
 {
 	if (tmp->cmd == NULL)
-		tmp->cmd = &tokens[*i];
+	{
+		if (tokens[*i].value[0] != '\0')
+			tmp->cmd = &tokens[*i];
+	}
 	else if (heredoc)
 		tmp->heredoc = command_args_append(tmp->heredoc, &tokens[*i]);
 	else

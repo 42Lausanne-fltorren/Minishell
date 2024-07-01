@@ -56,6 +56,11 @@ int	handle_input(char *input, char ***envp, int last_command_exit_status)
 	tokens = tokenize(input);
 	if (!tokens)
 		return (last_command_exit_status);
+	if (!syntax_check(tokens))
+	{
+		ft_putstr_fd("Minishell: syntax error\n", STDERR_FILENO);
+		return (last_command_exit_status);
+	}
 	commands = parse(tokens);
 	expand_commands(commands, *envp, last_command_exit_status);
 	last_command_exit_status = executor(commands, envp);
@@ -70,7 +75,7 @@ int	handle_input(char *input, char ***envp, int last_command_exit_status)
 	(void)argv;
 	envp = ft_init(argc, argv, envp);
 	int	last_command_exit_status = 0;
-	const char *input = "cat <missing | ls";
+	const char *input = "\"\"\"\'\'ls\"\"\'\'";
 	t_token *tokens = tokenize(input);
 	t_command *commands = parse(tokens);
 	int i = 0;
@@ -159,6 +164,7 @@ int	main(int argc, char **argv, char **envp)
 	envp = ft_init(argc, argv, envp);
 	while (1)
 	{
+		signal(SIGQUIT, SIG_IGN);
 		input = get_input();
 		if (!input)
 			break ;

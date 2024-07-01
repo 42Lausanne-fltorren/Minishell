@@ -27,7 +27,8 @@ static int	ft_samekey(char *envp, char *key_value)
 		ft_free_arr(split);
 		return (0);
 	}
-	res = ft_strncmp(split[0], split2[0], ft_strlen(split[0]));
+	res = ft_strncmp(split[0], split2[0], ft_strlen(split[0]))
+		&& ft_strlen(split[0]) == ft_strlen(split2[0]);
 	ft_free_arr(split);
 	ft_free_arr(split2);
 	return (res == 0);
@@ -79,13 +80,40 @@ static int	is_valid(char *str)
 	return (1);
 }
 
+static int	print_env(char ***envp, int fd)
+{
+	int		i;
+	char	**split;
+
+	i = -1;
+	while ((*envp)[++i])
+	{
+		if ((*envp)[i][0] == '_')
+			continue ;
+		ft_putstr_fd("declare -x ", fd);
+		split = ft_split((*envp)[i], '=');
+		if (!split)
+			return (1);
+		ft_putstr_fd(split[0], fd);
+		if (split[1])
+		{
+			ft_putstr_fd("=\"", fd);
+			ft_putstr_fd(split[1], fd);
+			ft_putstr_fd("\"", fd);
+		}
+		ft_putstr_fd("\n", fd);
+		ft_free_arr(split);
+	}
+	return (0);
+}
+
 int	ft_export(t_token **args, char ***envp, int fd)
 {
 	int	i;
 
 	(void)fd;
 	if (!args || !args[0])
-		return (0);
+		return (print_env(envp, fd));
 	i = -1;
 	while (args[++i])
 	{
@@ -100,8 +128,7 @@ int	ft_export(t_token **args, char ***envp, int fd)
 	i = -1;
 	while (args[++i])
 	{
-		if (ft_strchr(args[i]->value, '='))
-			add_to_env(args[i]->value, envp);
+		add_to_env(args[i]->value, envp);
 	}
 	return (0);
 }

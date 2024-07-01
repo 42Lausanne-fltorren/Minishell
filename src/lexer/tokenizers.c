@@ -61,8 +61,6 @@ t_token	tokenize_double_quote(const char *input, int *i)
 	j = *i + 1;
 	while (input[j] && input[j] != '\"')
 		j++;
-	if (!ft_isspace(input[j + 1]) && input[j + 1] != '\0')
-		return (tokenize_word(input, i));
 	token.value = ft_substr(input, *i + 1, j - *i - 1);
 	(*i) = j + 1;
 	return (token);

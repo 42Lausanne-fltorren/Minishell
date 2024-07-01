@@ -54,15 +54,20 @@ char	**ft_get_args(t_command command)
 {
 	char	**args;
 	int		i;
+	int		j;
 
 	args = malloc(sizeof(char *) * (ft_command_args_len(command) + 2));
 	if (!args)
 		return (NULL);
 	args[0] = command.cmd->value;
 	i = 0;
-	while (command.args && command.args[i])
+	j = -1;
+	while (command.args && command.args[++j])
 	{
-		args[i + 1] = command.args[i]->value;
+		if (command.args[i]->space)
+			args[i + 1] = command.args[j]->value;
+		else
+			args[i + 1] = merge(command.args, j);
 		i++;
 	}
 	args[i + 1] = NULL;

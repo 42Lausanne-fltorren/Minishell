@@ -23,7 +23,7 @@ OS_FLAGS	= -Llibft -lft
 
 ifeq ($(UNAME),Linux)
 #	OS_FLAGS = -Llibft -lft
-	OS_FLAGS = -Llibft -lft -Wl,-rpath=libft
+	OS_FLAGS = -Llibft -lft -L. -Wl,-rpath=$$PWD
 endif
 
 all: $(NAME)

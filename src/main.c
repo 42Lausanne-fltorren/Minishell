@@ -162,6 +162,7 @@ int	main(int argc, char **argv, char **envp)
 	int			exit_status;
 
 	envp = ft_init(argc, argv, envp);
+	exit_status = 0;
 	while (1)
 	{
 		signal(SIGQUIT, SIG_IGN);

@@ -35,6 +35,8 @@ t_token	tokenize_word(const char *input, int *i)
 	}
 	token.value = ft_substr(input, *i, j - (*i));
 	(*i) = j;
+	if (ft_isspace(input[*i]))
+		token.space = 1;
 	return (token);
 }
 
@@ -49,6 +51,8 @@ t_token	tokenize_single_quote(const char *input, int *i)
 		j++;
 	token.value = ft_substr(input, *i + 1, j - *i - 1);
 	(*i) = j + 1;
+	if (ft_isspace(input[*i]))
+		token.space = 1;
 	return (token);
 }
 
@@ -65,5 +69,7 @@ t_token	tokenize_double_quote(const char *input, int *i)
 		return (tokenize_word(input, i));
 	token.value = ft_substr(input, *i + 1, j - *i - 1);
 	(*i) = j + 1;
+	if (ft_isspace(input[*i]))
+		token.space = 1;
 	return (token);
 }

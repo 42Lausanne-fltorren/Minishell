@@ -63,3 +63,29 @@ int	ft_isdir(const char *fileName)
 	stat(fileName, &path);
 	return (S_ISREG(path.st_mode));
 }
+
+char	*merge(t_token **args, int j)
+{
+	char	*dst;
+	int		i;
+	int		len;
+	char	*tmp;
+
+	i = j;
+	while (args[i] && args[i]->space)
+		len += ft_strlen(args[i++]->value);
+	dst = malloc(sizeof(char) * (len + i - j));
+	i = j;
+	while (args[i] && args[i]->space)
+	{
+		tmp = dst;
+		dst = ft_strjoin(tmp, args[i]->value);
+		free(tmp);
+		i++;
+		if (args[i] && args[i]->space)
+		{
+			ft_strlcat(dst, " ", ft_strlen(dst) + 1);
+		}
+	}
+	return (dst);
+}

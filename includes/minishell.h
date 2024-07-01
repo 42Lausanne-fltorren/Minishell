@@ -42,6 +42,7 @@ typedef struct s_token
 {
 	t_token_type	type;
 	char			*value;
+	int				space;
 }	t_token;
 
 t_token		tokenize_pipe(const char *input, int *i);
@@ -94,6 +95,7 @@ void		ft_wait(int cmd_count, pid_t *pids, int *status);
 void		ft_heredoc(t_command cmd, int *pipe);
 void		ft_free_all(int **pipes, pid_t *pids, int cmd_count);
 int			**ft_init_pipes(int cmd_count, pid_t *pids);
+char		*merge(t_token **args, int j);
 int			run_builtin(t_command cmd, char ***envp, int fd);
 char		**arr_dup(char **arr);
 void		ft_setup_out(t_command cmd);

@@ -28,7 +28,7 @@ static int	ft_samekey(char *envp, char *key_value)
 		return (0);
 	}
 	res = ft_strncmp(split[0], split2[0], ft_strlen(split[0]))
-		&& ft_strlen(split[0]) == ft_strlen(split2[0]);
+		+ (ft_strlen(split[0]) - ft_strlen(split2[0]));
 	ft_free_arr(split);
 	ft_free_arr(split2);
 	return (res == 0);
